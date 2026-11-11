@@ -9,7 +9,7 @@
  * /chat/completions — синхронный ограничен ~120с.
  */
 
-function createSiberiClient({ apiKey, baseUrl = 'https://siberi.online/api/v1/ai' }) {
+function createSiberiClient({ apiKey, baseUrl = 'http://127.0.0.1:5005/api/v1/ai' }) {
   if (!apiKey) throw new Error('createSiberiClient: apiKey обязателен');
 
   // Rate-limit (429) — не долбим сразу повторно, ждём и пробуем ещё пару раз.

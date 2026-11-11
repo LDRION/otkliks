@@ -15,7 +15,7 @@ type AskOptions = { timeoutMs?: number };
 
 function getEnv() {
   const apiKey = process.env.SIBERI_API_KEY;
-  const baseUrl = process.env.SIBERI_BASE_URL || 'https://siberi.online/api/v1/ai';
+  const baseUrl = process.env.SIBERI_BASE_URL || 'http://127.0.0.1:5005/api/v1/ai';
   return { apiKey, baseUrl };
 }
 
