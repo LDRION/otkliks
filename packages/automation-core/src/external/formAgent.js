@@ -37,6 +37,30 @@ const SNAPSHOT_SELECTOR = [
 const CAPTCHA_RE = /я не робот|i'?m not a robot|подтвердите, что вы (не робот|человек)|введите (текст|символы) с картинки/i;
 const CONFIRM_RE = /спасибо|благодарим|отправлен|принят|получили ваш|ответ записан|заявка получена|thank you|submitted|received|recorded/i;
 const MAX_STEPS = 8;
+const SNAPSHOT_TIMEOUT_MS = 20000;
+
+// Промис с потолком по времени: по истечении — ошибка с кодом code.
+function within(promise, ms, code) {
+  let timer;
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => { timer = setTimeout(() => reject(new Error(code)), ms); }),
+  ]).finally(() => clearTimeout(timer));
+}
+
+// Анкета hh отправлена, если страница вакансии показывает отклик как отправленный.
+async function hhResponseSent(page) {
+  try {
+    return await within((async () => {
+      if (!/hh\.ru\/vacancy\//.test(page.url())) return false;
+      await page.waitForLoadState('domcontentloaded', { timeout: 8000 }).catch(() => {});
+      const marks = '[data-qa="vacancy-response-link-view-topic"], [data-qa^="responded-success"], [data-qa*="response-sent"]';
+      return (await page.locator(marks).count()) > 0;
+    })(), 12000, 'CHECK_TIMEOUT');
+  } catch {
+    return false;
+  }
+}
 const MAX_ELEMENTS = 60;
 
 /**
@@ -431,7 +455,18 @@ async function runFormAgent(browserCtx, url, {
     await page.waitForTimeout(1500);
 
     for (let step = 1; step <= maxSteps; step += 1) {
-      const snap = await snapshot(page);
+      // Снимок с потолком по времени. После отправки анкеты hh уводит страницу обратно на
+      // вакансию, и evaluate посреди этого перехода мог ждать бесконечно: живой случай
+      // 12.11.2026 — круг висел 8 минут, пока его не снял сторож, а отклик при этом ушёл.
+      let snap;
+      try {
+        snap = await within(snapshot(page), SNAPSHOT_TIMEOUT_MS, 'SNAPSHOT_TIMEOUT');
+      } catch (e) {
+        if (history.length && await hhResponseSent(page)) {
+          return { submitted: true, steps: step, actions: history, fields: filledFields };
+        }
+        return { submitted: false, steps: step, actions: history, fields: filledFields, reason: e.message };
+      }
 
       const blocker = detectBlocker(snap);
       if (blocker) return { submitted: false, steps: step, actions: history, reason: blocker };
