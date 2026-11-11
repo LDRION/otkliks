@@ -8,7 +8,16 @@ const { CLOSED_VACANCY_RE, CHAT_CLOSED_RE } = require('./vacancyState');
 
 const CHATIK_BASE = 'https://chatik.hh.ru';
 
-const MESSAGE_SELECTOR = '[data-qa^="chatik-chat-message-"]:not([data-qa$="-text"])';
+// -action — кнопки внутри треда («Добавить сопроводительное»), это не сообщения.
+const MESSAGE_SELECTOR = '[data-qa^="chatik-chat-message-"]:not([data-qa$="-text"]):not([data-qa$="-action"])';
+// Вёрстка чата с ноября 2026 (чат открывается на <регион>.hh.ru/chat/…): своё сообщение
+// помечено классом «…outgoing…» (раньше «message_my»), текст — в chat-bubble-text, имя
+// отправителя — в chat-bubble-label. Первым в узле идёт ярлык даты chat-marker-label-text:
+// он тоже кончается на «-text», поэтому прежний «первый -text» читал «Вчера» вместо текста.
+const OWN_MARK = '[class*="outgoing"], [class*="message_my"]';
+const BUBBLE_TEXT = '[data-qa="chat-bubble-text"]';
+const LEGACY_TEXT = '[data-qa$="-text"]:not([data-qa^="chat-marker"])';
+const BUBBLE_LABEL = '[data-qa="chat-bubble-label"]';
 // hh переименовал поле ввода: теперь это <textarea data-qa="text-input"
 // placeholder="Сообщение">, а кнопки «Отправить» нет — отправка по Enter
 // (enterkeyhint="enter"). Старые селекторы держим запасными.
@@ -182,7 +191,7 @@ async function fetchThreadMessages(browserCtx, url) {
       if (scroller) scroller.scrollTop = scroller.scrollHeight;   // вернуться к свежим
     }, MESSAGE_SELECTOR).catch(() => {});
 
-    const messages = await page.evaluate((sel) => {
+    const messages = await page.evaluate(({ sel, own, bubbleText, legacyText, bubbleLabel }) => {
       // Текст сообщения нужно очистить от того, что hh рисует рядом: заголовка
       // «Отклик на вакансию» у первого сообщения и времени, приклеенного в конце.
       // Без этого мусор уезжал и в контекст модели, и в ленту событий, где выглядел
@@ -217,24 +226,37 @@ async function fetchThreadMessages(browserCtx, url) {
 
       const nodes = Array.from(document.querySelectorAll(sel));
       return nodes.map((n) => {
-        const isOwn = n.querySelector('[class*="message_my"]') != null;
+        const isOwn = n.querySelector(own) != null;
         // Текст — из первого НЕПУСТОГО элемента «…-text», а если таких нет — из всего узла.
         // Раньше брали первый попавшийся: если он оказывался пустым служебным, сообщение
         // выпадало целиком, и в треде оставались одни даты (живой тред 06.10.2026: ни одного
         // сообщения работодателя, ИИ ответил по описанию вакансии).
         let text = '';
-        let textEl = null;
-        for (const el of n.querySelectorAll('[data-qa$="-text"]')) {
-          text = clean(el.textContent);
-          if (text) { textEl = el; break; }
+        let textEl = n.querySelector(bubbleText);
+        if (textEl) text = clean(textEl.textContent);
+        if (!text) {
+          textEl = null;
+          for (const el of n.querySelectorAll(legacyText)) {
+            text = clean(el.textContent);
+            if (text) { textEl = el; break; }
+          }
         }
         if (!text) text = clean(n.textContent);
         const msg = { from: isOwn ? 'ai' : 'employer', text };
-        const lead = isOwn ? null : firstText(n);
-        const name = lead ? lead.textContent.trim() : '';
-        if (name && NAME_RE.test(name) && !NOT_NAME.test(name) && !(textEl && textEl.contains(lead))
-          && clean(n.textContent).length > name.length + 1) {
-          msg.author = name;
+        if (!isOwn) {
+          // Новая вёрстка: имя — отдельным элементом. Старая: первая строка узла.
+          const label = n.querySelector(bubbleLabel);
+          const labelText = label ? label.textContent.trim() : '';
+          if (labelText) {
+            msg.author = labelText;
+          } else if (!n.querySelector(bubbleText)) {
+            const lead = firstText(n);
+            const name = lead ? lead.textContent.trim() : '';
+            if (name && NAME_RE.test(name) && !NOT_NAME.test(name) && !(textEl && textEl.contains(lead))
+              && clean(n.textContent).length > name.length + 1) {
+              msg.author = name;
+            }
+          }
         }
         return msg;
       }).filter((m) => {
@@ -244,7 +266,7 @@ async function fetchThreadMessages(browserCtx, url) {
         if (/(присоединился к чату|покинул чат)$/i.test(m.text)) return false;
         return true;
       });
-    }, MESSAGE_SELECTOR);
+    }, { sel: MESSAGE_SELECTOR, own: OWN_MARK, bubbleText: BUBBLE_TEXT, legacyText: LEGACY_TEXT, bubbleLabel: BUBBLE_LABEL });
     const real = messages.filter((m) => !isChatChrome(m.text));
 
     // Ни одного сообщения работодателя. Обычно так и есть (он молчит), но если hh при этом
@@ -306,12 +328,12 @@ const normForMatch = (s) => String(s || '').replace(/ /g, ' ').replace(/\s+/g, 
 
 // Снимок наших сообщений в треде (сколько и текст последнего) — до и после отправки.
 async function ownSnapshot(page) {
-  return page.evaluate((sel) => {
-    const own = Array.from(document.querySelectorAll(sel)).filter((n) => n.querySelector('[class*="message_my"]'));
+  return page.evaluate(({ sel, ownMark, bubbleText, legacyText }) => {
+    const own = Array.from(document.querySelectorAll(sel)).filter((n) => n.querySelector(ownMark));
     const last = own[own.length - 1];
-    const textEl = last && last.querySelector('[data-qa$="-text"]');
+    const textEl = last && (last.querySelector(bubbleText) || last.querySelector(legacyText));
     return { count: own.length, lastText: (textEl ? textEl.textContent : (last ? last.textContent : '')) || '' };
-  }, MESSAGE_SELECTOR);
+  }, { sel: MESSAGE_SELECTOR, ownMark: OWN_MARK, bubbleText: BUBBLE_TEXT, legacyText: LEGACY_TEXT });
 }
 
 /**
@@ -373,7 +395,8 @@ async function sendReply(browserCtx, url, text) {
           const scope = field.closest('form') || (field.parentElement && field.parentElement.parentElement) || document.body;
           const btns = Array.from((scope || document.body).querySelectorAll('button')).filter(vis);
           const hint = (b) => `${b.getAttribute('data-qa') || ''} ${b.getAttribute('aria-label') || ''} ${b.getAttribute('title') || ''}`.toLowerCase();
-          const hinted = btns.find((b) => /send|отправ|надісл/.test(hint(b)));
+          // Голосовые «Отправить запись» / record-complete — не отправка текста.
+          const hinted = btns.find((b) => /send|отправ|надісл/.test(hint(b)) && !/record|voice|запис/.test(hint(b)));
           if (hinted) { send = hinted; confident = true; }
         }
         if (send) send.setAttribute('data-otkliks-send', '1');
@@ -450,9 +473,13 @@ async function sendReply(browserCtx, url, text) {
     }
 
     // Отправка: приоритет — найденная кнопка (если активна). Enter как крайняя мера.
-    const sendBtn = page.locator('[data-otkliks-send]').first();
+    // С ноября 2026 hh рисует кнопку отправки (chatik-do-send-message) только когда в поле
+    // уже есть текст, поэтому до ввода её не найти — ждём её здесь, после ввода.
+    const lateSend = page.locator(SEND_BUTTON_SELECTOR).first();
+    const lateVisible = await lateSend.waitFor({ state: 'visible', timeout: 5000 }).then(() => true, () => false);
+    const sendBtn = lateVisible ? lateSend : page.locator('[data-otkliks-send]').first();
     let dispatched = false;
-    if (tagged.send) {
+    if (lateVisible || tagged.send) {
       try {
         const disabled = await sendBtn.evaluate(
           (b) => b.disabled === true || b.getAttribute('aria-disabled') === 'true' || b.hasAttribute('disabled'),
