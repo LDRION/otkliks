@@ -26,7 +26,9 @@ const activityEventSchema = new mongoose.Schema(
     incoming: String,
     // Заполненная анкета: вопрос → ответ.
     fields: [{ question: String, answer: String, _id: false }],
-    outcome: { type: String, enum: ['interview', 'rejection', 'question', 'other'] },
+    // stack_mismatch и vacancy_closed присылает агент (чужой стек, вакансия в архиве) — без них
+  // создание события падало, и запрос агента висел до таймаута.
+  outcome: { type: String, enum: ['interview', 'rejection', 'question', 'other', 'stack_mismatch', 'vacancy_closed'] },
     read: { type: Boolean, default: false },
   },
   { timestamps: true },

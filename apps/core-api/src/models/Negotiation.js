@@ -28,7 +28,7 @@ const negotiationSchema = new mongoose.Schema(
     loopDetected: { type: Boolean, default: false },
     outcome: {
       type: String,
-      enum: ['pending', 'interview', 'rejection', 'question', 'other'],
+      enum: ['pending', 'interview', 'rejection', 'question', 'other', 'stack_mismatch', 'vacancy_closed'],
       default: 'pending',
     },
   },
