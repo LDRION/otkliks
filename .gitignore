@@ -1,0 +1,34 @@
+node_modules/
+.env
+.env.*
+!.env.example
+dist/
+build/
+.next/
+out/
+*.log
+*.tsbuildinfo
+.turbo/
+.DS_Store
+
+# Local SQLite data (admins, view counts) — never committed
+apps/marketing-site/data/
+
+# Electron build artifacts
+apps/local-agent/release/
+apps/local-agent/dist/
+
+# Playwright test output
+apps/marketing-site/test-results/
+apps/marketing-site/playwright-report/
+
+# Claude Code local settings (personal permission overrides, not shared)
+.claude/settings.local.json
+
+# Артефакты сборки лаунчера — 100 МБ бинарников в git не место.
+releases/
+apps/local-agent/dist/
+apps/local-agent/.stage/
+
+# Локальный бэкап старых сборок лаунчера (сотни МБ .zip) — не в git.
+_rollback-0.4.0/

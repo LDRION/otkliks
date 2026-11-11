@@ -1,0 +1,33 @@
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 22px; }
+.tab { padding: 6px 12px; border-radius: 999px; border: 1px solid var(--border, var(--line, #e3e6ee)); font-size: 0.85rem; color: inherit; text-decoration: none; }
+.tab:hover { border-color: currentColor; }
+.tabOn { background: #0a8f7e; border-color: transparent; color: #fff; }
+.tabOn:hover { border-color: transparent; }
+.funnel { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-top: 22px; }
+.step { padding: 14px 16px; border-radius: 12px; border: 1px solid var(--border, var(--line, #e3e6ee)); display: grid; gap: 4px; }
+.step b { font-size: 1.45rem; font-weight: 800; line-height: 1.1; }
+.step span { font-size: 0.8rem; opacity: 0.7; }
+.rowLink { color: inherit; text-decoration: none; font-weight: 600; }
+.rowLink:hover { text-decoration: underline; }
+.sub { display: block; font-size: 0.8rem; opacity: 0.65; margin-top: 2px; word-break: break-word; }
+.badge { display: inline-block; margin-left: 6px; padding: 1px 7px; border-radius: 999px; font-size: 0.72rem; font-weight: 600; vertical-align: 1px; background: rgba(120, 130, 160, 0.14); }
+.badgeWarn { background: rgba(224, 73, 46, 0.12); color: #c4382f; }
+.badgeHint { background: rgba(217, 119, 6, 0.14); color: #a85c04; text-decoration: none; }
+.nowrap { white-space: nowrap; }
+.stage { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; white-space: nowrap; background: rgba(120, 130, 160, 0.14); }
+.stage_launcher, .stage_resume { background: rgba(10, 143, 126, 0.12); color: #0a7a6c; }
+.stage_applying { background: rgba(10, 143, 126, 0.2); color: #086f62; }
+.stage_invited, .stage_paid { background: #0a8f7e; color: #fff; }
+.sources { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.src { padding: 4px 10px; border-radius: 8px; font-size: 0.82rem; background: rgba(120, 130, 160, 0.1); }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 18px; }
+.kv { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 8px 14px; font-size: 0.9rem; margin-top: 12px; }
+.kv dt { opacity: 0.65; }
+.kv dd { margin: 0; word-break: break-word; }
+.path { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.pathStep { padding: 4px 10px; border-radius: 999px; font-size: 0.8rem; background: rgba(120, 130, 160, 0.1); opacity: 0.55; }
+.pathDone { background: rgba(10, 143, 126, 0.14); color: #086f62; opacity: 1; font-weight: 600; }
+.markForm { display: grid; gap: 10px; margin-top: 12px; }
+.check { display: flex; gap: 8px; align-items: center; font-size: 0.92rem; }
+.saved { font-size: 0.85rem; color: #0a7a6c; }
+.scroll { overflow-x: auto; }

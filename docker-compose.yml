@@ -1,0 +1,45 @@
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    volumes:
+      - mongo-data:/data/db
+
+  core-api:
+    build:
+      context: ./apps/core-api
+    restart: unless-stopped
+    depends_on:
+      - mongo
+    env_file:
+      - apps/core-api/.env
+    environment:
+      # .env — это dev-настройки для localhost; внутри compose-сети сервисы видят друг
+      # друга по имени сервиса, не по 127.0.0.1. environment: перекрывает env_file.
+      MONGODB_URI: mongodb://mongo:27017/otkliks
+    ports:
+      - '4000:4000'
+
+  marketing-site:
+    build:
+      context: .
+      dockerfile: apps/marketing-site/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - core-api
+    env_file:
+      - apps/marketing-site/.env.local
+    environment:
+      CORE_API_URL: http://core-api:4000
+    volumes:
+      # SQLite (админы, счётчики просмотров, заявки на консультацию). Next standalone
+      # server.js сам делает process.chdir() в свою директорию при старте — значит
+      # lib/db.ts (process.cwd() + 'data') резолвится в apps/marketing-site/data
+      # ВНУТРИ образа, а не в /app/data, как можно было бы подумать по WORKDIR.
+      - marketing-data:/app/apps/marketing-site/data
+    ports:
+      - '3000:3000'
+
+volumes:
+  mongo-data:
+  marketing-data:

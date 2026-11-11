@@ -1,0 +1,21 @@
+{
+  "name": "@hhpilot/local-agent",
+  "version": "1.0.23",
+  "private": true,
+  "description": "Откликс — локальный лаунчер: проверяет подписку и гоняет automation-core на компьютере пользователя",
+  "main": "src/main/index.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "build:win": "electron-builder --win --config electron-builder.yml",
+    "pack": "electron-builder --dir --config electron-builder.yml"
+  },
+  "dependencies": {
+    "@hhpilot/automation-core": "workspace:*",
+    "electron-updater": "^6.8.9"
+  },
+  "devDependencies": {
+    "electron": "^43.0.0",
+    "electron-builder": "^26.15.3"
+  }
+}

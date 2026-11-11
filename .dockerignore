@@ -1,0 +1,12 @@
+**/node_modules
+.git
+**/.next
+apps/marketing-site/data
+apps/marketing-site/test-results
+apps/marketing-site/playwright-report
+apps/local-agent/release
+apps/local-agent/dist
+**/.env
+**/.env.local
+*.log
+*.tsbuildinfo

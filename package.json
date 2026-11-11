@@ -1,0 +1,17 @@
+{
+  "name": "otkliks",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Откликс — AI-автопилот поиска работы на hh.ru: сайт и кабинет, API, десктопный лаунчер и ядро автоматизации",
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "packageManager": "pnpm@11.22.0",
+  "scripts": {
+    "dev:marketing": "pnpm --filter @hhpilot/marketing-site dev",
+    "dev:core-api": "pnpm --filter @hhpilot/core-api dev",
+    "dev:local-agent": "pnpm --filter @hhpilot/local-agent dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint"
+  }
+}

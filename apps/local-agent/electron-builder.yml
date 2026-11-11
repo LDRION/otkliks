@@ -1,0 +1,89 @@
+# Сборка установщика лаунчера Откликс.
+#
+# Цель — Windows: клиенты продукта сидят на Windows, а автоматизация hh.ru ходит
+# в уже установленный у них Edge (см. packages/automation-core/src/browser.js —
+# connectOverCDP к системному msedge.exe). Свой Chromium мы не тащим, поэтому
+# установщик остаётся лёгким; переменная PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD в
+# скрипте сборки закрепляет это явно.
+appId: ru.otkliks.launcher
+# В staging-сборке devDependencies нет, версию рантайма задаём явно.
+electronVersion: 43.4.1
+# Из 55 языковых файлов Chromium (47 МБ) оставляем русский и английский —
+# английский Chromium использует как запасной, без него часть строк пустая.
+electronLanguages: [ru, en-US]
+copyright: Otkliks (otkliks.ru)
+
+directories:
+  output: dist
+  buildResources: build
+
+# В пакет кладём только исходники приложения и рантайм-зависимости. Всё
+# остальное (сборочные инструменты, ресурсы установщика) остаётся снаружи.
+files:
+  - src/**/*
+  - package.json
+  # automation-core кладётся в staging руками (workspace-пакет), поэтому в обход
+  # зависимостей не попадает — включаем явным правилом. Без него в сборке нет
+  # всей логики автоотклика, и лаунчер ставится пустым.
+  - node_modules/@hhpilot/**/*
+  - '!**/*.map'
+  - '!**/test/**'
+  - '!**/tests/**'
+
+# automation-core — workspace-пакет, симлинк на ../../packages. В asar симлинк не
+# кладётся как есть, поэтому просим electron-builder втянуть его содержимое.
+asar: true
+asarUnpack:
+  - '**/node_modules/playwright/**'
+
+win:
+  # ТОЛЬКО архив, установщик собирать перестали. Не от хорошей жизни: у сборки нет
+  # подписи кода, и поведенческий анализ антивирусов (у Касперского — PDM) убивал
+  # установщик прямо на распаковке файлов. Архив исполняемым файлом не является,
+  # под эту проверку не попадает и ставится без борьбы. Установщик, который через
+  # раз не доходит до конца, хуже, чем его отсутствие.
+  # Цена решения: у архива нет автообновления через electron-updater — вместо него
+  # лаунчер сам сверяет версию с latest.yml и зовёт скачать (см. main/updateCheck.js).
+  target:
+    - target: zip
+      arch: [x64]
+  icon: build/icon.ico
+  # Подписи кода нет: сертификат стоит денег и требует юрлица. Без неё Windows
+  # покажет SmartScreen-предупреждение при первом запуске — это ожидаемо и должно
+  # быть написано на странице скачивания, а не всплыть для клиента сюрпризом.
+  signAndEditExecutable: true
+
+nsis:
+  oneClick: false                 # даём выбрать папку — иначе ставится молча в AppData
+  perMachine: false               # без прав администратора
+  # Продукт русский — установщик тоже. Без этого NSIS берёт английский по умолчанию,
+  # и человек видит «Choose Installation Options».
+  installerLanguages: [ru_RU]
+  language: '1049'                # LCID русского
+  # Убирает страницу «для всех пользователей / только для меня»: ставим всегда
+  # текущему пользователю, права администратора не нужны, а лишний экран только
+  # удлиняет путь до кнопки «Установить».
+  allowElevation: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: always     # always, а не true: ярлык появляется и при переустановке
+  createStartMenuShortcut: true
+  # Имя exe латиницей (см. build-installer.sh), а человеку в ярлыках показываем
+  # нормальное русское название.
+  shortcutName: Откликс
+  # Финальный экран «Установка завершена» с галочкой «Запустить Откликс».
+  runAfterFinish: true
+  # Своя страница с выбором автозапуска при включении ПК.
+  include: build/installer.nsh
+  # Имя файла держим латиницей: кириллица в имени скачиваемого файла ломается у
+  # части браузеров и почтовиков.
+  artifactName: Otkliks-Setup-${version}.${ext}
+  installerIcon: build/icon.ico
+  uninstallerIcon: build/icon.ico
+  installerHeaderIcon: build/icon.ico
+  deleteAppDataOnUninstall: false # токен устройства и настройки переживают переустановку
+
+# Автообновления: лаунчер спрашивает свой же сайт. Раздаётся тем же nginx, что и
+# сам установщик (см. /var/www/hhpilot/releases и конфиг otkliks).
+publish:
+  - provider: generic
+    url: https://otkliks.ru/download

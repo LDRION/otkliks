@@ -1,0 +1,876 @@
+<title>Светлый лендинг Откликса</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+/* Концепция: светлая «рамка» по центру страницы с волосяными линиями по краям и между
+   секциями; вместо картинок — живой интерфейс Откликса; у каждой возможности свой цвет,
+   своё демо и три подпункта, которые подсвечиваются по очереди. Светлая тема намеренно. */
+:root {
+  color-scheme: light;
+  --bg: #f7f8fb;          /* фон страницы: холодный белый с уклоном в наш синий */
+  --panel: #ffffff;
+  --panel-2: #f1f3f8;
+  --line: #e3e6ee;        /* волосяные линии рамки */
+  --line-2: #d3d8e3;
+  --ink: #0d1328;         /* почти чёрный с синим — основной текст и тёмные кнопки */
+  --ink-2: #4a5269;
+  --ink-3: #8b92a7;
+  --ink-4: #b9bfcd;
+  --navy: #212d4e;        /* фирменный тёмно-синий */
+  --teal: #12edcf;        /* фирменный бирюзовый — заливки и свечение */
+  --teal-ink: #0a8f7e;    /* бирюзовый для текста на белом */
+  --c-match: #0fb9a3;     /* подбор */
+  --c-letter: #4a62e8;    /* письма */
+  --c-chat: #7a5cff;      /* переписка */
+  --c-form: #f08c1a;      /* анкеты */
+  --c-you: #e6496f;       /* решения за вами */
+
+  --display: 'Onest', 'Inter', system-ui, sans-serif;
+  --text: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  --frame: 1120px;
+  --pad: clamp(20px, 4vw, 56px);
+  --r: 14px;
+  --shadow: 0 1px 2px rgba(13,19,40,.04), 0 10px 30px -12px rgba(13,19,40,.12);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--text); font-size: 18px; line-height: 1.55; -webkit-font-smoothing: antialiased; overflow-x: clip; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+h1, h2, h3 { font-family: var(--display); font-weight: 500; margin: 0; letter-spacing: -.03em; text-wrap: balance; }
+::selection { background: rgba(18, 237, 207, .3); }
+:focus-visible { outline: 2px solid var(--teal-ink); outline-offset: 3px; border-radius: 6px; }
+
+/* ── Рамка: вертикальные линии по краям колонки, секции разделены линиями ─────── */
+.frame { position: relative; max-width: var(--frame); margin-inline: auto; border-inline: 1px solid var(--line); background: transparent; }
+.row { position: relative; border-top: 1px solid var(--line); }
+.pad { padding: clamp(48px, 7vw, 96px) var(--pad); }
+.page { padding-inline: 16px; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 46px; padding: 0 20px; border-radius: 10px; font-size: 16px; font-weight: 500; text-decoration: none; cursor: pointer; border: 1px solid transparent; transition: background .2s, box-shadow .2s, transform .2s; white-space: nowrap; }
+.btn--dark { background: var(--ink); color: #fff; box-shadow: 0 1px 0 rgba(255,255,255,.15) inset, 0 6px 16px -6px rgba(13,19,40,.5); }
+.btn--dark:hover { background: var(--navy); }
+.btn--line { background: var(--panel); border-color: var(--line-2); color: var(--ink); box-shadow: 0 1px 2px rgba(13,19,40,.05); }
+.btn--line:hover { background: var(--panel-2); }
+.btn--sm { height: 38px; padding: 0 14px; font-size: 15px; border-radius: 9px; }
+
+.chip { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; color: var(--ink-2); }
+.dot { width: 20px; height: 20px; border-radius: 6px; display: grid; place-items: center; flex: none; background: var(--c); box-shadow: inset 0 -2px 0 rgba(0,0,0,.12); }
+.dot svg { width: 12px; height: 12px; stroke: #fff; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── Шапка ───────────────────────────────────────────────────────────────────── */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 40; background: color-mix(in srgb, var(--bg) 82%, transparent); -webkit-backdrop-filter: blur(14px) saturate(160%); backdrop-filter: blur(14px) saturate(160%); border-bottom: 1px solid transparent; transition: border-color .3s; }
+.top.is-stuck { border-bottom-color: var(--line); }
+.top__in { max-width: var(--frame); margin-inline: auto; display: flex; align-items: center; gap: 28px; height: 68px; padding-inline: var(--pad); }
+.logo { display: inline-flex; align-items: center; gap: 1px; font-family: var(--display); font-weight: 600; font-size: 22px; letter-spacing: -.03em; text-decoration: none; color: var(--ink); }
+.logo svg { width: 26px; height: 26px; margin-right: 1px; color: var(--navy); }
+.logo b { color: var(--teal-ink); font-weight: 600; }
+.top nav { display: flex; gap: 26px; margin-inline: auto; }
+.top nav a { text-decoration: none; font-size: 16px; font-weight: 500; color: var(--ink-2); transition: color .2s; }
+.top nav a:hover { color: var(--ink); }
+.top__act { display: flex; gap: 10px; }
+
+/* ── Первый экран ────────────────────────────────────────────────────────────── */
+.hero { position: relative; text-align: center; padding: clamp(56px, 8vw, 104px) var(--pad) 40px; overflow: hidden; }
+.hero::before { content: ''; position: absolute; inset: 0; z-index: -1;
+  background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px); background-size: 64px 64px; background-position: center -1px;
+  -webkit-mask: radial-gradient(70% 90% at 50% 0%, #000 30%, transparent 75%); mask: radial-gradient(70% 90% at 50% 0%, #000 30%, transparent 75%); opacity: .7; }
+.news { display: inline-flex; align-items: center; border: 1px solid var(--line-2); border-radius: 99px; background: var(--panel); box-shadow: 0 1px 2px rgba(13,19,40,.05); font-size: 15px; text-decoration: none; overflow: hidden; }
+.news span { padding: 7px 14px; color: var(--ink); font-weight: 500; display: inline-flex; gap: 8px; align-items: center; }
+.news span::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 0 3px rgba(18,237,207,.25); }
+.news i { padding: 7px 14px; border-left: 1px solid var(--line-2); color: var(--ink-3); font-style: normal; }
+.hero h1 { font-size: clamp(40px, 6.6vw, 80px); line-height: 1.02; margin-top: 28px; }
+.hero h1 em { font-style: normal; color: var(--teal-ink); }
+.hero p { font-size: clamp(18px, 1.6vw, 21px); color: var(--ink-2); max-width: 36em; margin: 22px auto 0; text-wrap: balance; }
+.hero__cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 34px; }
+
+/* Вкладки над интерфейсом и сам интерфейс. */
+.show { position: relative; padding: 0 var(--pad) clamp(40px, 6vw, 72px); background: linear-gradient(180deg, transparent, var(--panel-2) 140px); }
+.tabs { position: relative; display: flex; justify-content: center; gap: 6px; margin: 0 auto; width: max-content; max-width: 100%; padding: 8px; border-radius: 16px; background: var(--bg); border: 1px solid var(--line); box-shadow: var(--shadow); flex-wrap: wrap; }
+.tab { all: unset; display: inline-flex; align-items: center; gap: 10px; padding: 9px 14px; border-radius: 10px; font-size: 16px; font-weight: 500; color: var(--ink-2); cursor: pointer; position: relative; overflow: hidden; transition: background .25s, color .25s, box-shadow .25s; }
+.tab[aria-selected="true"] { background: var(--panel); color: var(--ink); box-shadow: 0 0 0 1px var(--line-2), 0 2px 6px -2px rgba(13,19,40,.12); }
+.tab .bar { position: absolute; left: 10px; right: 10px; bottom: 3px; height: 2px; border-radius: 2px; background: var(--c); transform-origin: left; transform: scaleX(0); opacity: 0; }
+.tab[aria-selected="true"] .bar { opacity: .7; animation: fill var(--dur, 7s) linear forwards; }
+@keyframes fill { to { transform: scaleX(1); } }
+
+.device { position: relative; max-width: 960px; margin: 22px auto 0; padding: 10px; border-radius: 22px; background: linear-gradient(180deg, #e9ecf3, #e1e5ee); border: 1px solid var(--line-2); box-shadow: 0 40px 80px -40px rgba(13,19,40,.35), 0 0 0 6px rgba(255,255,255,.6); }
+.app { display: grid; grid-template-columns: 210px minmax(0, 1fr); min-height: 470px; border-radius: 14px; overflow: hidden; background: var(--panel); border: 1px solid var(--line); text-align: left; font-size: 14px; }
+.side { background: #fbfcfd; border-right: 1px solid var(--line); padding: 16px 12px; display: flex; flex-direction: column; gap: 4px; }
+.side .logo { font-size: 18px; margin: 2px 8px 16px; }
+.side .logo svg { width: 20px; height: 20px; }
+.nav-i { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 8px; color: var(--ink-2); font-weight: 500; }
+.nav-i svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.nav-i.is-on { background: rgba(18,237,207,.12); color: var(--ink); }
+.nav-i b { margin-left: auto; font-size: 11px; font-weight: 600; min-width: 18px; height: 18px; border-radius: 6px; display: grid; place-items: center; background: var(--c-you); color: #fff; padding: 0 5px; }
+.side small { margin: 14px 10px 4px; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+.side .pilot { margin-top: auto; padding: 10px; border-radius: 10px; border: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; font-weight: 600; }
+.sw { width: 34px; height: 20px; border-radius: 99px; background: var(--teal); position: relative; box-shadow: 0 0 10px rgba(18,237,207,.6); }
+.sw::after { content: ''; position: absolute; right: 2px; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); }
+
+.main { padding: 18px 20px; min-width: 0; position: relative; }
+.main__h { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.main__h b { font-size: 16px; font-weight: 600; }
+.live { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--teal-ink); font-weight: 600; }
+.live::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--teal); animation: ping 1.6s infinite; }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(18,237,207,.7); } 100% { box-shadow: 0 0 0 8px rgba(18,237,207,0); } }
+.pane { display: none; }
+.pane.is-on { display: block; animation: paneIn .45s ease; }
+@keyframes paneIn { from { opacity: 0; transform: translateY(6px); } }
+
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.stat { padding: 12px 14px; border-right: 1px solid var(--line); }
+.stat:last-child { border-right: 0; }
+.stat span { display: block; font-size: 12px; color: var(--ink-3); }
+.stat b { font-family: var(--mono); font-size: 22px; font-weight: 600; letter-spacing: -.02em; }
+.feed { margin-top: 14px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.feed__h, .frow { display: grid; grid-template-columns: 54px minmax(0, 1.6fr) minmax(0, 1fr) 150px; gap: 10px; padding: 9px 14px; align-items: center; }
+.feed__h { background: var(--panel-2); font-size: 11.5px; color: var(--ink-3); font-weight: 600; }
+.frow { border-top: 1px solid var(--line); font-size: 13px; }
+.frow.is-new { animation: rowIn .6s cubic-bezier(.2,.8,.2,1); background: linear-gradient(90deg, rgba(18,237,207,.1), transparent 60%); }
+@keyframes rowIn { from { opacity: 0; transform: translateY(-12px); } }
+.frow time { font-family: var(--mono); color: var(--ink-3); font-size: 12px; }
+.frow .v { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.frow .c { color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.st { justify-self: start; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 99px; color: var(--c); background: color-mix(in srgb, var(--c) 12%, white); border: 1px solid color-mix(in srgb, var(--c) 28%, white); white-space: nowrap; }
+
+.thread { display: grid; gap: 10px; max-width: 560px; }
+.msg { max-width: 82%; padding: 10px 14px; border-radius: 14px; font-size: 14px; line-height: 1.45; }
+.msg small { display: block; font-size: 11px; color: var(--ink-3); margin-bottom: 3px; font-weight: 600; }
+.msg--hr { background: var(--panel-2); border-bottom-left-radius: 4px; }
+.demo .msg--hr { background: var(--panel); border: 1px solid var(--line); box-shadow: 0 1px 2px rgba(13,19,40,.04); }
+.demo .msg--me { box-shadow: 0 1px 2px rgba(13,19,40,.04); }
+.msg--me { justify-self: end; background: color-mix(in srgb, var(--c-chat) 10%, white); border: 1px solid color-mix(in srgb, var(--c-chat) 25%, white); border-bottom-right-radius: 4px; }
+.guard { margin-top: 14px; display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; color: var(--teal-ink); padding: 6px 10px; border-radius: 8px; background: rgba(18,237,207,.1); }
+.ask { margin-top: 14px; padding: 12px 14px; border-radius: 12px; border: 1px dashed color-mix(in srgb, var(--c-you) 50%, white); background: color-mix(in srgb, var(--c-you) 5%, white); font-size: 13.5px; }
+.ask b { color: var(--c-you); }
+.qa { display: grid; gap: 8px; max-width: 620px; }
+.qa__r { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px; align-items: center; }
+.qa__q { color: var(--ink-2); }
+.qa__a { font-weight: 600; min-height: 1.4em; }
+.qa__a.is-typing::after { content: ''; display: inline-block; width: 2px; height: 1em; vertical-align: -2px; margin-left: 1px; background: var(--c-form); animation: blink 1s steps(2) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.qa__src { font-size: 12.5px; color: var(--ink-3); margin-bottom: 12px; display: flex; gap: 8px; align-items: center; }
+
+.caption { position: absolute; left: 50%; bottom: 22px; translate: -50% 0; width: min(560px, calc(100% - 40px)); display: flex; align-items: center; gap: 14px; padding: 12px 12px 12px 16px; border-radius: 14px; background: rgba(13,19,40,.92); color: #fff; box-shadow: 0 20px 40px -12px rgba(13,19,40,.5); text-align: left; }
+.caption .dot { width: 30px; height: 30px; border-radius: 9px; }
+.caption .dot svg { width: 16px; height: 16px; }
+.caption b { display: block; font-size: 15px; font-weight: 600; }
+.caption span { font-size: 13.5px; color: rgba(255,255,255,.65); }
+.caption .btn { margin-left: auto; height: 36px; font-size: 14px; background: #fff; color: var(--ink); border-radius: 9px; padding: 0 14px; }
+
+/* ── Факты ───────────────────────────────────────────────────────────────────── */
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.fact { padding: 30px var(--pad); border-right: 1px solid var(--line); border-top: 1px solid var(--line); }
+.fact:nth-child(3n) { border-right: 0; }
+.fact:nth-child(-n+3) { border-top: 0; }
+.fact b { display: block; font-family: var(--mono); font-weight: 600; font-size: clamp(26px, 2.6vw, 34px); letter-spacing: -.03em; color: var(--ink); }
+.fact span { font-size: 15.5px; color: var(--ink-2); }
+
+/* ── Манифест: текст проявляется при прокрутке ───────────────────────────────── */
+.dotted { background-image: radial-gradient(var(--line-2) 1px, transparent 1.2px); background-size: 18px 18px; }
+.manifest { position: relative; overflow: hidden; }
+.manifest__txt { max-width: 640px; margin-inline: auto; font-family: var(--display); font-size: clamp(26px, 3vw, 38px); line-height: 1.28; letter-spacing: -.02em; font-weight: 500; }
+.manifest__txt p { margin: 0 0 .9em; }
+.manifest__txt p:last-child { margin-bottom: 0; }
+.w { color: var(--ink-4); transition: color .35s ease; }
+.w.on { color: var(--ink); }
+.ic { display: inline-flex; vertical-align: -4px; margin-inline: 4px; }
+.ic .dot { width: 28px; height: 28px; border-radius: 8px; }
+.ic .dot svg { width: 15px; height: 15px; }
+.float { position: absolute; padding: 10px 12px; border-radius: 12px; background: var(--panel); border: 1px solid var(--line); box-shadow: var(--shadow); font-size: 13px; display: flex; gap: 10px; align-items: center; animation: bob 7s ease-in-out infinite; }
+.float b { font-weight: 600; }
+.float small { display: block; color: var(--ink-3); font-size: 12px; }
+@keyframes bob { 50% { translate: 0 -8px; } }
+
+/* ── Возможность ─────────────────────────────────────────────────────────────── */
+.feat__h { max-width: 620px; }
+.feat__h h2 { font-size: clamp(34px, 4.4vw, 54px); line-height: 1.05; margin-top: 16px; }
+.feat__h p { color: var(--ink-2); font-size: clamp(17px, 1.4vw, 20px); margin: 16px 0 26px; }
+.demo { position: relative; border-top: 1px solid var(--line); background: var(--panel-2); padding: clamp(36px, 5vw, 64px) var(--pad); display: grid; place-items: center; overflow: hidden; min-height: 360px; }
+.subs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--line); background: var(--panel-2); padding: 0 var(--pad) clamp(36px, 5vw, 56px); }
+.sub { all: unset; cursor: pointer; display: block; padding: 22px 26px 6px; border-left: 2px solid var(--line-2); transition: border-color .3s, opacity .3s; opacity: .45; }
+.sub.is-on { border-left-color: var(--c); opacity: 1; }
+.sub:hover { opacity: 1; }
+.sub b { display: block; font-size: 16.5px; font-weight: 600; font-family: var(--display); }
+.sub span { display: block; font-size: 15px; color: var(--ink-2); margin-top: 6px; }
+.sub i { display: inline-block; margin-top: 12px; font-style: normal; font-size: 14.5px; font-weight: 600; color: var(--c); visibility: hidden; }
+.sub.is-on i { visibility: visible; }
+
+/* Демо подбора: стопка вакансий. */
+.stack { display: grid; gap: 12px; width: min(560px, 100%); }
+.vc { display: grid; grid-template-columns: 38px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 14px 16px; border-radius: 14px; background: var(--panel); border: 1px solid var(--line); box-shadow: var(--shadow); transition: transform .5s cubic-bezier(.2,.8,.2,1), opacity .5s; }
+.vc:nth-child(2) { margin-left: 26px; } .vc:nth-child(3) { margin-left: 52px; }
+.stack:hover .vc { margin-left: 0; }
+.vc .lg { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; font-family: var(--display); font-weight: 600; color: #fff; background: var(--c); }
+.vc b { display: block; font-size: 15.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vc small { color: var(--ink-3); font-size: 13px; }
+.vc.is-skip { opacity: .5; }
+.vc.is-skip .st { --c: #8b92a7 !important; }
+
+/* Демо письма. */
+.letter { width: min(600px, 100%); padding: 22px 24px; border-radius: 16px; background: var(--panel); border: 1px solid var(--line); box-shadow: var(--shadow); font-size: 16px; line-height: 1.6; }
+.letter__h { display: flex; justify-content: space-between; gap: 12px; padding-bottom: 12px; margin-bottom: 14px; border-bottom: 1px solid var(--line); font-size: 13.5px; color: var(--ink-3); }
+.letter__h b { color: var(--ink); font-weight: 600; }
+.letter__t { min-height: 6.4em; }
+.letter__t mark { background: color-mix(in srgb, var(--c-letter) 14%, white); color: inherit; border-radius: 4px; padding: 0 2px; }
+.caret { display: inline-block; width: 2px; height: 1.05em; vertical-align: -2px; background: var(--c-letter); margin-left: 1px; animation: blink 1s steps(2) infinite; }
+
+/* Демо анкеты. */
+.form { width: min(520px, 100%); padding: 22px 24px; border-radius: 16px; background: var(--panel); border: 1px solid var(--line); box-shadow: var(--shadow); }
+.form__t { font-family: var(--display); font-weight: 600; font-size: 18px; }
+.form__s { font-size: 13.5px; color: var(--ink-3); margin-bottom: 14px; }
+.fld { display: grid; gap: 6px; padding: 10px 0; border-top: 1px solid var(--line); font-size: 14.5px; }
+.fld label { color: var(--ink-2); }
+.fld .in { min-height: 38px; padding: 9px 12px; border-radius: 9px; border: 1px solid var(--line-2); font-weight: 500; transition: border-color .3s, box-shadow .3s; }
+.fld.is-on .in { border-color: color-mix(in srgb, var(--c-form) 60%, white); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-form) 15%, transparent); }
+.where { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+.where span { font-size: 13px; font-weight: 600; padding: 5px 10px; border-radius: 99px; border: 1px solid var(--line-2); background: var(--panel); color: var(--ink-2); }
+
+/* Отзыв между возможностями. */
+.quote { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 30px; align-items: end; padding: clamp(32px, 4vw, 52px) var(--pad); border-top: 1px solid var(--line); }
+.quote p { margin: 0; font-family: var(--display); font-size: clamp(21px, 2vw, 27px); line-height: 1.35; letter-spacing: -.015em; max-width: 30em; }
+.who { text-align: right; font-size: 14px; color: var(--ink-3); }
+.who b { display: block; color: var(--ink); font-size: 15.5px; font-weight: 600; }
+.ava { width: 40px; height: 40px; border-radius: 50%; display: inline-grid; place-items: center; margin-top: 10px; font-weight: 600; color: #fff; background: linear-gradient(140deg, var(--teal-ink), var(--c-letter)); }
+
+/* ── Безопасность: схема ─────────────────────────────────────────────────────── */
+.safe { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(28px, 4vw, 60px); align-items: center; }
+.safe h2 { font-size: clamp(34px, 4.4vw, 54px); line-height: 1.05; margin-top: 16px; }
+.safe p { color: var(--ink-2); margin: 16px 0 0; }
+.nums { display: grid; gap: 18px; margin-top: 30px; }
+.nums div span { display: block; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+.nums div b { font-family: var(--mono); font-weight: 600; font-size: clamp(24px, 2.4vw, 30px); color: var(--teal-ink); }
+.flow { position: relative; aspect-ratio: 1 / .78; container-type: inline-size; }
+.node { position: absolute; padding: 3.2cqi 3.6cqi; border-radius: 3cqi; background: var(--panel); border: 1px solid var(--line); box-shadow: var(--shadow); font-size: max(13px, 2.6cqi); }
+.node b { display: block; font-family: var(--display); font-weight: 600; font-size: max(15px, 3.4cqi); }
+.node small { display: block; color: var(--ink-3); margin-top: .6cqi; font-size: max(12px, 2.3cqi); line-height: 1.35; }
+.node--pc { left: 0; top: 30%; width: 42%; border-color: color-mix(in srgb, var(--teal) 60%, white); box-shadow: 0 0 0 4px rgba(18,237,207,.12), var(--shadow); }
+.node--hh { right: 0; top: 6%; width: 34%; }
+.node--us { right: 0; bottom: 4%; width: 40%; }
+.tag2 { display: inline-flex; margin-top: 1.6cqi; font-size: max(11px, 2.1cqi); font-weight: 600; padding: .6cqi 1.6cqi; border-radius: 99px; background: rgba(18,237,207,.14); color: var(--teal-ink); }
+.wire { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.wire path { fill: none; stroke-width: 2; }
+.pk { offset-rotate: 0deg; position: absolute; left: 0; top: 0; width: 10px; height: 10px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 10px var(--teal); animation: run 2.6s linear infinite; }
+.pk--2 { animation-delay: -1.3s; }
+.pk--s { background: var(--ink-3); box-shadow: none; width: 7px; height: 7px; animation-duration: 4s; }
+@keyframes run { from { offset-distance: 0%; } to { offset-distance: 100%; } }
+
+/* ── Тарифы ──────────────────────────────────────────────────────────────────── */
+.plans { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+.plan { padding: clamp(32px, 4vw, 52px) var(--pad); display: flex; flex-direction: column; }
+.plan + .plan { border-left: 1px solid var(--line); background: var(--panel); }
+.plan .chip { margin-bottom: 18px; }
+.price { font-family: var(--display); font-weight: 500; font-size: clamp(54px, 6vw, 76px); letter-spacing: -.05em; line-height: 1; }
+.price small { font-family: var(--text); font-size: 17px; letter-spacing: 0; color: var(--ink-3); margin-left: 6px; font-weight: 500; }
+.plan p { color: var(--ink-2); margin: 10px 0 0; }
+.plan ul { list-style: none; padding: 0; margin: 26px 0 30px; display: grid; gap: 12px; }
+.plan li { display: flex; gap: 12px; font-size: 16.5px; }
+.plan li::before { content: ''; flex: none; width: 18px; height: 18px; margin-top: 3px; border-radius: 50%; background: var(--teal) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M4 8.4 6.8 11 12 5.4' stroke='%230d1328' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/12px no-repeat; }
+.plan .btn { margin-top: auto; align-self: flex-start; }
+.plan .note { font-size: 13.5px; color: var(--ink-3); margin-top: 14px; }
+.cloudrow { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; justify-content: space-between; padding: 22px var(--pad); border-top: 1px solid var(--line); font-size: 16.5px; }
+.cloudrow b { font-weight: 600; }
+.cloudrow span { color: var(--ink-2); }
+.cloudrow a { color: var(--teal-ink); font-weight: 600; text-decoration: none; white-space: nowrap; }
+.foot { font-size: 13px; color: var(--ink-3); padding: 0 var(--pad) 22px; margin: 0; }
+
+/* ── Отзывы: сетка ───────────────────────────────────────────────────────────── */
+.revs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+.rev { padding: 30px var(--pad); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.rev:nth-child(3n) { border-right: 0; }
+.rev--wide { grid-column: span 2; }
+.rev p { margin: 0; font-size: 16.5px; line-height: 1.55; color: var(--ink-2); }
+.rev p strong { color: var(--ink); font-weight: 600; }
+.rev--wide p { font-family: var(--display); font-size: clamp(19px, 1.8vw, 24px); color: var(--ink); letter-spacing: -.01em; line-height: 1.4; }
+.rev footer { display: flex; align-items: center; gap: 12px; margin-top: auto; font-size: 15px; font-weight: 600; }
+.rev footer .ava { margin: 0; width: 34px; height: 34px; font-size: 14px; }
+
+/* ── Изменения ───────────────────────────────────────────────────────────────── */
+.ship { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); }
+.ship > div:first-child { border-right: 1px solid var(--line); }
+.ship h2 { font-size: clamp(32px, 3.6vw, 44px); font-style: italic; font-weight: 500; }
+.ship p { color: var(--ink-2); margin: 12px 0 0; }
+.tl { list-style: none; margin: 0; padding: 0; position: relative; }
+.tl::before { content: ''; position: absolute; left: 19px; top: 10px; bottom: 10px; width: 1px; background: var(--line-2); }
+.tl li { position: relative; display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 16px; padding: 12px 0; }
+.tl li::before { content: ''; width: 39px; height: 39px; border-radius: 50%; background: var(--panel); border: 1px solid var(--line-2); box-shadow: inset 0 0 0 9px var(--panel), inset 0 0 0 30px var(--c, var(--line-2)); }
+.tl b { display: block; font-weight: 600; font-size: 16.5px; }
+.tl span { font-size: 14px; color: var(--ink-3); font-family: var(--mono); }
+
+/* ── Вопросы ─────────────────────────────────────────────────────────────────── */
+.faq { border-top: 1px solid var(--line); }
+.faq details { border-bottom: 1px solid var(--line); padding: 0 var(--pad); }
+.faq details:last-child { border-bottom: 0; }
+.faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; gap: 20px; align-items: center; padding: 24px 0; font-family: var(--display); font-weight: 500; font-size: clamp(19px, 1.7vw, 23px); letter-spacing: -.015em; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: ''; flex: none; width: 28px; height: 28px; border-radius: 8px; border: 1px solid var(--line-2); background: linear-gradient(var(--ink), var(--ink)) center/11px 1.6px no-repeat, linear-gradient(var(--ink), var(--ink)) center/1.6px 11px no-repeat, var(--panel); transition: rotate .3s; }
+.faq details[open] summary::after { rotate: 45deg; }
+.faq details p { margin: 0 0 24px; color: var(--ink-2); max-width: 46em; }
+
+/* ── Финал ───────────────────────────────────────────────────────────────────── */
+.cta { position: relative; margin-top: 60px; background: #0b1124; color: #fff; text-align: center; padding: clamp(80px, 10vw, 140px) var(--pad) clamp(70px, 9vw, 120px); overflow: hidden; }
+.cta::before { content: ''; position: absolute; left: 50%; top: -1px; translate: -50% 0; width: min(560px, 70%); height: 46px; background: var(--bg); border-radius: 0 0 40px 40px; }
+.cta::after { content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(60% 70% at 50% 110%, rgba(18,237,207,.28), transparent 70%), linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px) 0 0/64px 64px, linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px) 0 0/64px 64px; }
+.cta > * { position: relative; z-index: 1; }
+.cta h2 { font-size: clamp(38px, 5vw, 64px); line-height: 1.05; max-width: 14em; margin-inline: auto; }
+.cta p { color: rgba(255,255,255,.65); font-size: clamp(17px, 1.5vw, 20px); margin: 18px auto 0; max-width: 30em; }
+.cta .hero__cta .btn--dark { background: #fff; color: var(--ink); }
+.cta .hero__cta .btn--line { background: rgba(255,255,255,.08); color: #fff; border-color: rgba(255,255,255,.18); }
+
+.footer { padding: 56px var(--pad) 40px; display: grid; grid-template-columns: minmax(0, 1.2fr) repeat(3, minmax(0, 1fr)); gap: 30px; font-size: 15px; }
+.footer h4 { margin: 0 0 12px; font-size: 14px; font-weight: 600; }
+.footer ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 9px; }
+.footer a { text-decoration: none; color: var(--ink-2); }
+.footer a:hover { color: var(--ink); }
+.footer__b { grid-column: 1 / -1; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding-top: 26px; margin-top: 10px; border-top: 1px solid var(--line); color: var(--ink-3); font-size: 14px; }
+.ok { display: inline-flex; align-items: center; gap: 8px; padding: 5px 10px; border: 1px solid var(--line-2); border-radius: 8px; background: var(--panel); color: var(--ink-2); }
+.ok::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #22c55e; }
+
+/* Появление при прокрутке — только сдвиг: текст читается всегда. */
+@supports (animation-timeline: view()) {
+  .rise { animation: rise linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; }
+  @keyframes rise { from { transform: translateY(28px); } }
+}
+
+/* ── Узкие экраны ────────────────────────────────────────────────────────────── */
+@media (max-width: 960px) {
+  .top nav { display: none; }
+  .top__act .btn--line { display: none; }
+  .top__act { margin-left: auto; }
+  .app { grid-template-columns: 1fr; }
+  .side { display: none; }
+  .safe, .ship { grid-template-columns: 1fr; }
+  .ship > div:first-child { border-right: 0; border-bottom: 1px solid var(--line); }
+  .revs { grid-template-columns: 1fr 1fr; }
+  .rev:nth-child(3n) { border-right: 1px solid var(--line); }
+  .rev:nth-child(2n) { border-right: 0; }
+  .rev--wide { grid-column: span 2; border-right: 0 !important; }
+  .footer { grid-template-columns: 1fr 1fr; }
+  .float { display: none; }
+}
+@media (max-width: 680px) {
+  .frame { border-inline: 0; }
+  .news i { display: none; }
+  .flow { aspect-ratio: auto; display: grid; gap: 12px; }
+  .flow .wire, .flow .pk { display: none; }
+  .node { position: static; width: auto !important; padding: 16px 18px; border-radius: 14px; }
+  .node b { font-size: 17px; } .node small { font-size: 14px; margin-top: 4px; } .tag2 { font-size: 12.5px; margin-top: 10px; padding: 3px 10px; }
+  .facts { grid-template-columns: 1fr 1fr; }
+  .fact:nth-child(3n) { border-right: 1px solid var(--line); }
+  .fact:nth-child(2n) { border-right: 0; }
+  .fact:nth-child(3) { border-top: 1px solid var(--line); }
+  .stats { grid-template-columns: 1fr 1fr; }
+  .stat:nth-child(2) { border-right: 0; }
+  .stat:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+  .feed__h, .frow { grid-template-columns: 44px minmax(0, 1fr) auto; }
+  .feed__h span:nth-child(3), .frow .c { display: none; }
+  .subs { grid-template-columns: 1fr; }
+  .sub { opacity: 1; padding-block: 18px 4px; }
+  .sub i { visibility: visible; }
+  .plans { grid-template-columns: 1fr; }
+  .plan + .plan { border-left: 0; border-top: 1px solid var(--line); }
+  .revs { grid-template-columns: 1fr; }
+  .rev, .rev--wide { grid-column: auto; border-right: 0 !important; }
+  .quote { grid-template-columns: 1fr; }
+  .who { text-align: left; }
+  .caption span { display: none; }
+  .vc:nth-child(2), .vc:nth-child(3) { margin-left: 0; }
+  .qa__r { grid-template-columns: 1fr; gap: 4px; }
+  .footer { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="mark" viewBox="-8 83 192 192"><path fill="currentColor" fill-rule="evenodd" d="__LOGO_PATH__"/></symbol>
+  <symbol id="i-search" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3 3"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 16 16"><path d="M3 13l.6-3L10.5 3.1a1.4 1.4 0 0 1 2 2L5.6 12z"/><path d="M9.5 4.2l2.3 2.3"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 16 16"><path d="M3 4.5A1.5 1.5 0 0 1 4.5 3h7A1.5 1.5 0 0 1 13 4.5v4.6a1.5 1.5 0 0 1-1.5 1.5H7.4L4.6 13v-2.4h-.1A1.5 1.5 0 0 1 3 9.1z"/></symbol>
+  <symbol id="i-form" viewBox="0 0 16 16"><rect x="3.2" y="2.5" width="9.6" height="11" rx="1.6"/><path d="M5.6 6.2h4.8M5.6 8.6h4.8M5.6 11h2.6"/></symbol>
+  <symbol id="i-you" viewBox="0 0 16 16"><circle cx="8" cy="5.6" r="2.6"/><path d="M3.4 13.4c.7-2.4 2.4-3.6 4.6-3.6s3.9 1.2 4.6 3.6"/></symbol>
+  <symbol id="i-home" viewBox="0 0 16 16"><path d="M2.5 7 8 2.6 13.5 7M4 6v7h3.2V9.6h1.6V13H12V6"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 16 16"><path d="M4.3 2.7h4.9L12 5.5v7.8H4.3z"/><path d="M9 2.7v3h3"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 16 16"><circle cx="8" cy="8" r="2.2"/><path d="M8 1.8v1.6M8 12.6v1.6M1.8 8h1.6M12.6 8h1.6M3.6 3.6l1.1 1.1M11.3 11.3l1.1 1.1M3.6 12.4l1.1-1.1M11.3 4.7l1.1-1.1"/></symbol>
+  <symbol id="i-feed" viewBox="0 0 16 16"><path d="M3 4h10M3 8h10M3 12h6"/></symbol>
+  <symbol id="i-star" viewBox="0 0 16 16"><path d="M8 2.4l1.7 3.5 3.8.5-2.8 2.6.7 3.8L8 11l-3.4 1.8.7-3.8-2.8-2.6 3.8-.5z"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 16 16"><path d="M8 2 3.2 3.9v3.6c0 3 2 5.4 4.8 6.5 2.8-1.1 4.8-3.5 4.8-6.5V3.9z"/><path d="m5.9 8 1.5 1.5 2.8-3"/></symbol>
+</svg>
+
+<div class="page">
+<header class="top" id="top">
+  <div class="top__in">
+    <a class="logo" href="https://otkliks.ru/" aria-label="Откликс"><svg aria-hidden="true"><use href="#mark"/></svg>ткл<b>икс</b></a>
+    <nav aria-label="Разделы"><a href="#match">Возможности</a><a href="#safe">Безопасность</a><a href="#pricing">Тарифы</a><a href="#reviews">Отзывы</a><a href="https://otkliks.ru/blog">Блог</a></nav>
+    <div class="top__act"><a class="btn btn--line btn--sm" href="https://otkliks.ru/app/login">Войти</a><a class="btn btn--dark btn--sm" href="https://otkliks.ru/app/register">Начать бесплатно</a></div>
+  </div>
+</header>
+
+<main class="frame">
+  <!-- ═══ Первый экран ═══ -->
+  <section class="hero">
+    <a class="news" href="#pricing"><span>Бесплатно — 100 откликов в день</span><i>Подробнее ↗</i></a>
+    <h1>Поиск работы<br><em>на автопилоте</em></h1>
+    <p>Откликс подбирает вакансии на hh.ru, пишет письмо под каждую, отвечает эйчарам и заполняет анкеты.</p>
+    <div class="hero__cta"><a class="btn btn--dark" href="https://otkliks.ru/app/register">Начать бесплатно</a><a class="btn btn--line" href="#match">Как это работает</a></div>
+  </section>
+
+  <section class="show" aria-label="Интерфейс Откликса">
+    <div class="tabs" role="tablist" aria-label="Экраны лаунчера">
+      <button class="tab" role="tab" aria-selected="true" data-pane="feed" style="--c:var(--c-match)"><span class="dot" style="--c:var(--c-match)"><svg><use href="#i-feed"/></svg></span>Лента автопилота<span class="bar"></span></button>
+      <button class="tab" role="tab" aria-selected="false" data-pane="chat" style="--c:var(--c-chat)"><span class="dot" style="--c:var(--c-chat)"><svg><use href="#i-chat"/></svg></span>Переписка<span class="bar"></span></button>
+      <button class="tab" role="tab" aria-selected="false" data-pane="form" style="--c:var(--c-form)"><span class="dot" style="--c:var(--c-form)"><svg><use href="#i-form"/></svg></span>Анкеты<span class="bar"></span></button>
+    </div>
+
+    <div class="device">
+      <div class="app">
+        <aside class="side">
+          <span class="logo"><svg aria-hidden="true"><use href="#mark"/></svg>ткл<b>икс</b></span>
+          <span class="nav-i is-on"><svg><use href="#i-home"/></svg>Панель</span>
+          <span class="nav-i"><svg><use href="#i-doc"/></svg>Резюме и профиль</span>
+          <span class="nav-i"><svg><use href="#i-gear"/></svg>Настройки</span>
+          <small>Ленты</small>
+          <span class="nav-i"><svg><use href="#i-feed"/></svg>Что происходит</span>
+          <span class="nav-i"><svg><use href="#i-star"/></svg>Приглашения<b style="background:var(--c-match)">2</b></span>
+          <span class="nav-i"><svg><use href="#i-you"/></svg>Нужен ваш ответ<b>1</b></span>
+          <span class="pilot">Автопилот<span class="sw"></span></span>
+        </aside>
+        <div class="main">
+          <div class="pane is-on" data-pane="feed">
+            <div class="main__h"><b>Что происходит</b><span class="live">Работает</span></div>
+            <div class="stats">
+              <div class="stat"><span>Отклики сегодня</span><b id="sToday">37</b></div>
+              <div class="stat"><span>Ответы в чатах</span><b>12</b></div>
+              <div class="stat"><span>Приглашения</span><b>2</b></div>
+              <div class="stat"><span>Лимит на сегодня</span><b>100</b></div>
+            </div>
+            <div class="feed">
+              <div class="feed__h"><span>Время</span><span>Вакансия</span><span>Компания</span><span>Событие</span></div>
+              <div id="feedRows"></div>
+            </div>
+          </div>
+          <div class="pane" data-pane="chat">
+            <div class="main__h"><b>Frontend-разработчик · Северный код</b><span class="live">Отвечает</span></div>
+            <div class="thread">
+              <div class="msg msg--hr"><small>Работодатель</small>Здравствуйте! Есть опыт с TypeScript и тестами?</div>
+              <div class="msg msg--me"><small>Вы · Откликс</small>Здравствуйте! Да, четыре года пишу на TypeScript, тесты — Jest и Playwright. Удобно обсудить детали на созвоне?</div>
+              <div class="msg msg--hr"><small>Работодатель</small>Отлично. Готовы ли вы к переезду в Санкт-Петербург?</div>
+            </div>
+            <div class="guard">✓ Сообщение проверено перед отправкой</div>
+            <div class="ask"><b>Нужен ваш ответ:</b> «Готовы к переезду?» — этого нет в резюме, решаете вы.</div>
+          </div>
+          <div class="pane" data-pane="form">
+            <div class="main__h"><b>Анкета работодателя</b><span class="live" style="color:var(--c-form)">Заполняю</span></div>
+            <div class="qa__src"><span class="dot" style="--c:var(--c-form)"><svg><use href="#i-form"/></svg></span>Яндекс Форма · по вашему резюме</div>
+            <div class="qa" id="qa">
+              <div class="qa__r"><span class="qa__q">Опыт коммерческой разработки</span><span class="qa__a" data-a="5 лет"></span></div>
+              <div class="qa__r"><span class="qa__q">Основной стек</span><span class="qa__a" data-a="React, TypeScript, Node.js"></span></div>
+              <div class="qa__r"><span class="qa__q">Ожидания по зарплате</span><span class="qa__a" data-a="от 220 000 ₽"></span></div>
+              <div class="qa__r"><span class="qa__q">Готовы выполнить тестовое?</span><span class="qa__a" data-a="Да"></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="caption" id="caption"><span class="dot" id="capDot" style="--c:var(--c-match)"><svg><use id="capIco" href="#i-feed"/></svg></span><div><b id="capT">Лента автопилота</b><span id="capS">Каждое действие Откликса — на виду, свежее сверху.</span></div><a class="btn" href="https://otkliks.ru/app/register">Попробовать</a></div>
+    </div>
+  </section>
+
+  <!-- ═══ Факты ═══ -->
+  <section class="row facts" aria-label="Коротко">
+    <div class="fact"><b>100</b><span>откликов в день бесплатно</span></div>
+    <div class="fact"><b>199 ₽</b><span>в месяц с приоритетом</span></div>
+    <div class="fact"><b>0</b><span>паролей от hh.ru у нас</span></div>
+    <div class="fact"><b>4</b><span>дела за вас: отклик, письмо, чат, анкета</span></div>
+    <div class="fact"><b>zip</b><span>без установщика и прав админа</span></div>
+    <div class="fact"><b>Kaspersky</b><span>файлы лаунчера проверены</span></div>
+  </section>
+
+  <!-- ═══ Манифест ═══ -->
+  <section class="row pad manifest dotted" id="manifest">
+    <div class="float" style="left:4%;top:18%"><span class="dot" style="--c:var(--c-match)"><svg><use href="#i-search"/></svg></span><div><b>92% совпадение</b><small>Frontend · удалённо</small></div></div>
+    <div class="float" style="right:4%;top:30%;animation-delay:-2s"><span class="dot" style="--c:var(--c-chat)"><svg><use href="#i-chat"/></svg></span><div><b>Ответили в чате</b><small>2 минуты назад</small></div></div>
+    <div class="float" style="left:7%;bottom:16%;animation-delay:-4s"><span class="dot" style="--c:var(--c-form)"><svg><use href="#i-form"/></svg></span><div><b>Анкета отправлена</b><small>Google Форма</small></div></div>
+    <div class="manifest__txt" id="mtxt">
+      <p>Работодатели уже автоматизировали отбор. Пора ответить тем же.</p>
+      <p>Откликс подбирает <span class="ic"><span class="dot" style="--c:var(--c-match)"><svg><use href="#i-search"/></svg></span></span> вакансии, пишет <span class="ic"><span class="dot" style="--c:var(--c-letter)"><svg><use href="#i-pen"/></svg></span></span> письма, отвечает в чате <span class="ic"><span class="dot" style="--c:var(--c-chat)"><svg><use href="#i-chat"/></svg></span></span> и заполняет анкеты <span class="ic"><span class="dot" style="--c:var(--c-form)"><svg><use href="#i-form"/></svg></span></span> сам.</p>
+      <p>Без вечеров на hh.ru. Без шаблонных писем.</p>
+      <p>Вы ищете работу, а не работаете поиском.</p>
+    </div>
+  </section>
+
+  <!-- ═══ Подбор ═══ -->
+  <section class="row" id="match">
+    <div class="pad feat__h rise">
+      <span class="chip"><span class="dot" style="--c:var(--c-match)"><svg><use href="#i-search"/></svg></span>Подбор вакансий</span>
+      <h2>Начинается с вашего резюме</h2>
+      <p>Дайте ссылку на резюме на hh.ru. Откликс найдёт подходящие вакансии и пропустит те, что вам не подходят.</p>
+      <a class="btn btn--line btn--sm" href="https://otkliks.ru/app/register">Подключить резюме</a>
+    </div>
+    <div class="demo">
+      <div class="stack">
+        <div class="vc"><span class="lg" style="--c:var(--c-match)">С</span><div><b>Frontend-разработчик (React)</b><small>Северный код · от 220 000 ₽ · удалённо</small></div><span class="st" style="--c:var(--c-match)">92% · отклик</span></div>
+        <div class="vc"><span class="lg" style="--c:var(--c-letter)">Ф</span><div><b>Middle JavaScript Developer</b><small>Финтех Лаб · гибрид</small></div><span class="st" style="--c:var(--c-match)">88% · отклик</span></div>
+        <div class="vc is-skip"><span class="lg" style="--c:#b9bfcd">П</span><div><b>Junior PHP-разработчик</b><small>Студия Пиксель · до 60 000 ₽</small></div><span class="st" style="--c:#8b92a7">мимо: зарплата</span></div>
+      </div>
+    </div>
+    <div class="subs" data-cycle style="--c:var(--c-match)">
+      <button class="sub is-on" type="button"><b>Резюме всегда свежее</b><span>Читаем его заново перед каждым действием.</span><i>Поменяли на hh.ru — мы видим</i></button>
+      <button class="sub" type="button"><b>Ваша минимальная зарплата</b><span>Вакансии ниже вилки пропускаем.</span><i>Где вилки нет — упомянем ориентир</i></button>
+      <button class="sub" type="button"><b>Несколько резюме</b><span>Frontend и AI — параллельно.</span><i>Каждое ведётся отдельно</i></button>
+    </div>
+    <div class="quote dotted"><p>«Полгода не мог найти нормальную работу, откровенно задолбался тратить на это время, уже почти потерял надежду. Если бы не ваш сервис, жена бы выгнала из дома, спасибо!»</p><div class="who"><b>Евгений</b>пользователь Откликса<br><span class="ava">Е</span></div></div>
+  </section>
+
+  <!-- ═══ Письма ═══ -->
+  <section class="row" id="letters">
+    <div class="pad feat__h rise">
+      <span class="chip"><span class="dot" style="--c:var(--c-letter)"><svg><use href="#i-pen"/></svg></span>Письма</span>
+      <h2>Письмо под каждую вакансию</h2>
+      <p>Не шаблон. Требования вакансии и ваш опыт под них — в четырёх-шести предложениях.</p>
+      <a class="btn btn--line btn--sm" href="https://otkliks.ru/app/register">Попробовать бесплатно</a>
+    </div>
+    <div class="demo">
+      <div class="letter"><div class="letter__h"><span>Сопроводительное письмо</span><b>Frontend · Северный код</b></div><div class="letter__t" id="letterT"></div></div>
+    </div>
+    <div class="subs" data-cycle style="--c:var(--c-letter)">
+      <button class="sub is-on" type="button"><b>Только факты из резюме</b><span>Опыта, которого нет, не появится.</span><i>Никаких выдуманных проектов</i></button>
+      <button class="sub" type="button"><b>Ваша ссылка на портфолио</b><span>Вставим и не испортим адрес.</span><i>GitHub, Behance, сайт</i></button>
+      <button class="sub" type="button"><b>Подпись вашим именем</b><span>Как будто писали вы.</span><i>Без служебных хвостов ИИ</i></button>
+    </div>
+  </section>
+
+  <!-- ═══ Переписка ═══ -->
+  <section class="row" id="chat">
+    <div class="pad feat__h rise">
+      <span class="chip"><span class="dot" style="--c:var(--c-chat)"><svg><use href="#i-chat"/></svg></span>Переписка</span>
+      <h2>Отвечает эйчарам, пока вы заняты</h2>
+      <p>На вопросы о стеке, опыте и условиях — по вашему резюме. А то, что решаете только вы, приходит вам.</p>
+      <a class="btn btn--line btn--sm" href="https://otkliks.ru/app/register">Подключить автопилот</a>
+    </div>
+    <div class="demo">
+      <div class="thread" style="width:min(560px,100%)" id="demoChat">
+        <div class="msg msg--hr"><small>Работодатель</small>Какой у вас опыт с React?</div>
+        <div class="msg msg--me"><small>Откликс</small>Пять лет: последние три — продуктовая команда, дизайн-система и SSR.</div>
+        <div class="msg msg--hr"><small>Работодатель</small>Когда вам удобно созвониться?</div>
+        <div class="ask"><b>Нужен ваш ответ:</b> время созвона выбираете вы — Откликс подождёт.</div>
+      </div>
+    </div>
+    <div class="subs" data-cycle style="--c:var(--c-chat)">
+      <button class="sub is-on" type="button"><b>Проверка перед отправкой</b><span>Работодателю уходит только сообщение.</span><i>Никаких «если хотите, я перепишу»</i></button>
+      <button class="sub" type="button"><b>Решения — за вами</b><span>Созвон, оффер, переезд.</span><i>Вопрос придёт в «Нужен ваш ответ»</i></button>
+      <button class="sub" type="button"><b>Ваш Telegram</b><span>Только если работодатель попросит.</span><i>Чужие ники из резюме — никогда</i></button>
+    </div>
+    <div class="quote dotted"><p>«Я уже и правда планировала идти к психологу, собеседование за собеседованием проваливала.. За 11 дней вы решили проблему, которую я уже называла несбыточной мечтой)»</p><div class="who"><b>Марьяна</b>пользователь Откликса<br><span class="ava">М</span></div></div>
+  </section>
+
+  <!-- ═══ Анкеты ═══ -->
+  <section class="row" id="forms">
+    <div class="pad feat__h rise">
+      <span class="chip"><span class="dot" style="--c:var(--c-form)"><svg><use href="#i-form"/></svg></span>Анкеты</span>
+      <h2>Прислали анкету? Заполним</h2>
+      <p>Там, где другие сервисы останавливаются, Откликс отвечает по резюме — с вашего согласия.</p>
+      <a class="btn btn--line btn--sm" href="https://otkliks.ru/app/register">Начать бесплатно</a>
+    </div>
+    <div class="demo">
+      <div class="form" id="demoForm">
+        <div class="form__t">Анкета кандидата</div><div class="form__s">Google Форма · 4 вопроса</div>
+        <div class="fld"><label>Ваше имя</label><div class="in" data-a="Иван Петров"></div></div>
+        <div class="fld"><label>Опыт работы с React</label><div class="in" data-a="5 лет, продуктовая разработка"></div></div>
+        <div class="fld"><label>Формат работы</label><div class="in" data-a="Удалённо"></div></div>
+        <div class="where"><span>Google Формы</span><span>Яндекс Формы</span><span>Сайты работодателей</span><span>Вопросы hh.ru</span></div>
+      </div>
+    </div>
+    <div class="subs" data-cycle style="--c:var(--c-form)">
+      <button class="sub is-on" type="button"><b>Любые конструкторы</b><span>Google, Яндекс и свои формы компаний.</span><i>И вопросы прямо в отклике hh.ru</i></button>
+      <button class="sub" type="button"><b>С вашего согласия</b><span>Лаунчер спросит при первом запуске.</span><i>Выключается в настройках</i></button>
+      <button class="sub" type="button"><b>Каждый ответ виден</b><span>Вопрос → ответ в ленте событий.</span><i>Ничего за вашей спиной</i></button>
+    </div>
+  </section>
+
+  <!-- ═══ Безопасность ═══ -->
+  <section class="row pad" id="safe">
+    <div class="safe">
+      <div class="rise">
+        <span class="chip"><span class="dot" style="--c:var(--navy)"><svg><use href="#i-shield"/></svg></span>Безопасность</span>
+        <h2>Ваш hh.ru остаётся вашим</h2>
+        <p>Лаунчер работает на вашем компьютере, в вашем браузере. Пароль от hh.ru нам не нужен, сессия не уходит на наш сервер.</p>
+        <div class="nums">
+          <div><span>Пароль от hh.ru</span><b>не нужен</b></div>
+          <div><span>Установка</span><b>распаковать и запустить</b></div>
+          <div><span>Антивирус</span><b>проверено Kaspersky</b></div>
+        </div>
+      </div>
+      <div class="flow" aria-label="Схема: данные hh.ru остаются на вашем компьютере">
+        <svg class="wire" viewBox="0 0 100 78" preserveAspectRatio="none" aria-hidden="true">
+          <path id="w1" d="M42 40 C 58 40, 58 16, 66 16" stroke="var(--teal)" vector-effect="non-scaling-stroke"/>
+          <path id="w2" d="M42 46 C 52 46, 52 64, 60 64" stroke="var(--line-2)" stroke-dasharray="4 4" vector-effect="non-scaling-stroke"/>
+        </svg>
+        <span class="pk" style="offset-path: path('M 0 0')" id="pk1"></span>
+        <span class="pk pk--2" id="pk2"></span>
+        <span class="pk pk--s" id="pk3"></span>
+        <div class="node node--pc"><b>Ваш компьютер</b><small>Лаунчер и ваш браузер. Вход в hh.ru — здесь.</small><span class="tag2">сессия остаётся тут</span></div>
+        <div class="node node--hh"><b>hh.ru</b><small>Отклики, чаты, анкеты — как будто вы сами.</small></div>
+        <div class="node node--us"><b>Откликс</b><small>Только статистика: сколько откликов, были ли сбои.</small></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Тарифы ═══ -->
+  <section class="row" id="pricing">
+    <div class="pad feat__h rise" style="max-width:none;text-align:center;margin-inline:auto">
+      <span class="chip" style="justify-content:center"><span class="dot" style="--c:var(--teal-ink)"><svg><use href="#i-star"/></svg></span>Тарифы</span>
+      <h2>Автопилот бесплатно.<br>Платите за приоритет.</h2>
+    </div>
+    <div class="plans">
+      <div class="plan">
+        <span class="chip"><span class="dot" style="--c:var(--c-match)"><svg><use href="#i-search"/></svg></span>Бесплатно</span>
+        <div class="price">0 ₽<small>навсегда</small></div>
+        <p>Без карты и без даты окончания.</p>
+        <ul><li>100 откликов в день с письмом</li><li>Ответы работодателям в чате</li><li>Заполнение анкет</li><li>4 простых задания в первые дни</li></ul>
+        <a class="btn btn--line" href="https://otkliks.ru/app/register">Начать бесплатно</a>
+        <span class="note">Задания: подписаться на Telegram, ВКонтакте, YouTube и оставить отзыв — по одному в день.</span>
+      </div>
+      <div class="plan">
+        <span class="chip"><span class="dot" style="--c:var(--c-chat)"><svg><use href="#i-star"/></svg></span>Приоритет</span>
+        <div class="price">199 ₽<small>в месяц</small></div>
+        <p>Или 99 ₽ за неделю. Дешевле всех аналогов*.</p>
+        <ul><li>Всё из бесплатного</li><li>Обработка в первую очередь</li><li>До 200 откликов в день</li><li>Без заданий и автосписаний</li></ul>
+        <a class="btn btn--dark" href="https://otkliks.ru/app/register">Подключить</a>
+        <span class="note">Оплата картой через ЮMoney. Продлеваете сами.</span>
+      </div>
+    </div>
+    <div class="cloudrow"><div><b>Облако 24/7 — скоро.</b> <span>Тот же автопилот, даже когда компьютер выключен.</span></div><a href="https://otkliks.ru/pricing#cloud">Сообщить о запуске →</a></div>
+    <p class="foot">* Сравнили стоимость недели и месяца платного тарифа у 10 сервисов автооткликов для hh.ru с опубликованными ценами. Данные на 29 сентября 2026 г.</p>
+  </section>
+
+  <!-- ═══ Отзывы ═══ -->
+  <section class="row" id="reviews">
+    <div class="pad feat__h rise" style="max-width:none;text-align:center">
+      <h2>Соискатели, которые смогли</h2>
+      <p style="margin-inline:auto;max-width:30em">Настоящие отзывы — как нам их написали.</p>
+    </div>
+    <div class="revs">
+      <div class="rev rev--wide"><p>«Не смогла получить офер за месяц работы вашего сервиса, но без него я бы не поняла что проблема в моем резюме. Поработала над ним - и за неделю сверху нашла, юху!!»</p><footer><span class="ava">Е</span>Елена</footer></div>
+      <div class="rev"><p>«в последнее время сайты по поиску работы и правда забиты хламом с мошенниками, наконец-то хоть кто-то решил эту проблему, <strong>оффер за 2 недели получил</strong>))»</p><footer><span class="ava">Д</span>Дмитрий</footer></div>
+      <div class="rev"><p>«Хотелось бы, чтобы не приходилось включать компьютер для работы вашего сервиса. Но приятно, что всё работает на фоне и вообще не нагружает систему. <strong>С четвёртого приглашения получила место!</strong>»</p><footer><span class="ava">Н</span>Наталья</footer></div>
+      <div class="rev"><p>«На прошлом месте появились разногласия с начальством, а после ухода я просто устала откликаться на хх... <strong>Откликс - лучшее лекарство от мигрени и стресса</strong>»</p><footer><span class="ava">З</span>Злата</footer></div>
+      <div class="rev"><p>«искала подвох, разве кто-то будет что-то делать по совести за такие гроши? <strong>откликс не подвёл</strong>, зря тревожилась, тревожница»</p><footer><span class="ava">К</span>Карина</footer></div>
+      <div class="rev rev--wide"><p>«наткнулся на техническую ошибку в работе, иногда откликс должен был ответить в чате с нанимателем "да" или "нет", а в итоге писал целые абзацы, из-за чего диалог не продолжался( а когда написал в поддержку - исправили за несколько часов, огонь»</p><footer><span class="ava">И</span>Иван</footer></div>
+      <div class="rev"><p>«В свои 22 я уже почти поседела, пока искала нормальное место! Каждый второй диалог с работодателем - уже или тупой скрипт, или аи..... <strong>Вы решили мою проблему</strong>»</p><footer><span class="ava">С</span>Софья</footer></div>
+    </div>
+  </section>
+
+  <!-- ═══ Изменения ═══ -->
+  <section class="row ship">
+    <div class="pad">
+      <h2>Мы быстро улучшаем</h2>
+      <p>Новая версия лаунчера приезжает сама — ничего скачивать заново не нужно.</p>
+    </div>
+    <div class="pad">
+      <ul class="tl">
+        <li style="--c:var(--c-match)"><div><b>Автозапуск вместе с компьютером</b><span>30 сентября</span></div></li>
+        <li style="--c:var(--c-chat)"><div><b>Бесплатный тариф: 100 откликов в день, всё включено</b><span>29 сентября</span></div></li>
+        <li style="--c:var(--c-letter)"><div><b>Проверка каждого сообщения перед отправкой</b><span>29 сентября</span></div></li>
+        <li style="--c:var(--c-form)"><div><b>Понятные вопросы в отчётах об анкетах</b><span>29 сентября</span></div></li>
+        <li style="--c:var(--c-you)"><div><b>Профиль одинаковый на сайте и в лаунчере</b><span>28 сентября</span></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ═══ Вопросы ═══ -->
+  <section class="row" id="faq">
+    <div class="pad feat__h rise"><h2>Вопросы</h2></div>
+    <div class="faq">
+      <details><summary>За это не забанят на hh.ru?</summary><p>Откликс ведёт себя как живой человек: паузы между откликами, дневные лимиты, проверка на капчу и выход из аккаунта перед каждым действием. Случаев ограничений у наших пользователей за всё время не было.</p></details>
+      <details><summary>Вы видите мой пароль от hh.ru?</summary><p>Нет. Лаунчер работает на вашем компьютере, в вашем браузере, и пароль от hh.ru не нужен вовсе. Наши серверы не видят ни пароль, ни сессию.</p></details>
+      <details><summary>Почему ИИ отвечает работодателю за меня?</summary><p>Чтобы вы не тратили вечера на переписку. Он отвечает только по фактам из резюме. Если вопрос требует вашего решения, Откликс ничего не придумывает: вы получите уведомление и ответите сами.</p></details>
+      <details><summary>Резюме нужно создавать заново?</summary><p>Нет. Достаточно ссылки на ваше резюме на hh.ru. Мы читаем его заново перед каждым письмом, так что правки подхватываются сразу.</p></details>
+      <details><summary>Что значит «бесплатно навсегда»?</summary><p>До 100 откликов в день со всеми функциями, без карты и без срока. В первые четыре дня — по одному простому заданию: подписки на наши соцсети и отзыв.</p></details>
+      <details><summary>Когда появится облако?</summary><p>Облачный режим в разработке: тот же автопилот будет работать круглосуточно на нашем сервере. Оставьте почту на странице тарифов — напишем один раз, когда запустим.</p></details>
+    </div>
+  </section>
+
+  <!-- ═══ Финал ═══ -->
+  <section class="cta">
+    <h2>Хватит откликаться по вечерам</h2>
+    <p>Подключите резюме — дальше Откликс будет работать за вас.</p>
+    <div class="hero__cta"><a class="btn btn--dark" href="https://otkliks.ru/app/register">Начать бесплатно</a><a class="btn btn--line" href="https://otkliks.ru/pricing">Тарифы</a></div>
+  </section>
+
+  <footer class="footer">
+    <div>
+      <a class="logo" href="https://otkliks.ru/"><svg aria-hidden="true"><use href="#mark"/></svg>ткл<b>икс</b></a>
+      <p style="color:var(--ink-3);font-size:15px;margin:14px 0 0;max-width:22em">ИИ-автопилот соискателя для hh.ru.</p>
+    </div>
+    <div><h4>Продукт</h4><ul><li><a href="#match">Возможности</a></li><li><a href="https://otkliks.ru/pricing">Тарифы</a></li><li><a href="https://otkliks.ru/app/register">Скачать лаунчер</a></li></ul></div>
+    <div><h4>Ресурсы</h4><ul><li><a href="https://otkliks.ru/blog">Блог</a></li><li><a href="https://otkliks.ru/partners">Партнёрам</a></li><li><a href="https://otkliks.ru/counselling">Поддержка психолога</a></li></ul></div>
+    <div><h4>Документы</h4><ul><li><a href="https://otkliks.ru/oferta">Оферта</a></li><li><a href="https://otkliks.ru/privacy">Политика</a></li><li><a href="https://otkliks.ru/consent">Согласие</a></li></ul></div>
+    <div class="footer__b"><span class="ok">Все системы работают</span><span>© 2026 Откликс</span></div>
+  </footer>
+</main>
+</div>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+  /* Шапка получает линию, когда страница прокручена. */
+  const top = $('#top');
+  const onScroll = () => top.classList.toggle('is-stuck', scrollY > 8);
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  /* Вкладки над интерфейсом: сами сменяются каждые 7 секунд, клик — сразу. */
+  const caps = {
+    feed: ['--c-match', 'i-feed', 'Лента автопилота', 'Каждое действие Откликса — на виду, свежее сверху.'],
+    chat: ['--c-chat', 'i-chat', 'Переписка', 'Отвечает по резюме, важное оставляет вам.'],
+    form: ['--c-form', 'i-form', 'Анкеты', 'Google и Яндекс Формы, анкеты на сайтах компаний.'],
+  };
+  const tabs = $$('.tab');
+  let tabTimer = null;
+  function selectTab(name, user) {
+    tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.pane === name)));
+    $$('.pane').forEach((p) => p.classList.toggle('is-on', p.dataset.pane === name));
+    const c = caps[name];
+    $('#capDot').style.setProperty('--c', `var(${c[0]})`);
+    $('#capIco').setAttribute('href', `#${c[1]}`);
+    $('#capT').textContent = c[2]; $('#capS').textContent = c[3];
+    if (name === 'form') fillQa();
+    clearTimeout(tabTimer);
+    if (!reduce && !user) tabTimer = setTimeout(() => selectTab(tabs[(tabs.findIndex((t) => t.dataset.pane === name) + 1) % tabs.length].dataset.pane), 7000);
+    if (user) tabs.forEach((t) => t.querySelector('.bar').style.animation = 'none');
+  }
+  tabs.forEach((t) => t.addEventListener('click', () => selectTab(t.dataset.pane, true)));
+  selectTab('feed');
+
+  /* Лента: новые события приходят сверху. Примеры, не настоящие данные. */
+  const ev = [
+    ['Frontend-разработчик (React)', 'Северный код', 'Отклик отправлен', '--c-match'],
+    ['Middle JavaScript Developer', 'Финтех Лаб', 'Ответили в чате', '--c-chat'],
+    ['React-разработчик', 'Облачные системы', 'Анкета заполнена', '--c-form'],
+    ['Frontend Lead', 'Студия Север', 'Приглашение', '--c-letter'],
+    ['Fullstack (Node.js)', 'Логистика Плюс', 'Отклик отправлен', '--c-match'],
+    ['UI-разработчик', 'Медиа Групп', 'Нужен ваш ответ', '--c-you'],
+  ];
+  const rows = $('#feedRows');
+  let clock = 14 * 60 + 2, ei = 0, today = 37;
+  const mk = (e, fresh) => {
+    const r = document.createElement('div'); r.className = 'frow' + (fresh ? ' is-new' : '');
+    const h = String(Math.floor(clock / 60)).padStart(2, '0'), m = String(clock % 60).padStart(2, '0');
+    r.innerHTML = `<time>${h}:${m}</time><span class="v"></span><span class="c"></span><span class="st" style="--c:var(${e[3]})"></span>`;
+    r.children[1].textContent = e[0]; r.children[2].textContent = e[1]; r.children[3].textContent = e[2];
+    return r;
+  };
+  for (let i = 0; i < 5; i++) { rows.appendChild(mk(ev[(i + 1) % ev.length], false)); clock -= 3; }
+  clock = 14 * 60 + 3;
+  if (!reduce) setInterval(() => {
+    ei = (ei + 1) % ev.length; clock += 2;
+    rows.prepend(mk(ev[ei], true));
+    while (rows.children.length > 5) rows.lastElementChild.remove();
+    if (ev[ei][2] === 'Отклик отправлен') $('#sToday').textContent = ++today;
+  }, 2600);
+
+  /* Анкета в интерфейсе: ответы печатаются по очереди. */
+  let qaRun = 0;
+  function fillQa() {
+    const run = ++qaRun;
+    const as = $$('#qa .qa__a');
+    as.forEach((a) => { a.textContent = reduce ? a.dataset.a : ''; a.classList.remove('is-typing'); });
+    if (reduce) return;
+    let k = 0;
+    const next = () => {
+      if (run !== qaRun || k >= as.length) return;
+      const a = as[k], t = a.dataset.a; let i = 0;
+      a.classList.add('is-typing');
+      const step = () => {
+        if (run !== qaRun) return;
+        a.textContent = t.slice(0, ++i);
+        if (i < t.length) setTimeout(step, 45); else { a.classList.remove('is-typing'); k++; setTimeout(next, 350); }
+      };
+      step();
+    };
+    setTimeout(next, 400);
+  }
+
+  /* Манифест: слова проявляются по мере прокрутки. */
+  const mtxt = $('#mtxt');
+  const words = [];
+  $$('p', mtxt).forEach((p) => {
+    [...p.childNodes].forEach((n) => {
+      if (n.nodeType !== 3) return;
+      const frag = document.createDocumentFragment();
+      n.textContent.split(/(\s+)/).forEach((part) => {
+        if (!part) return;
+        if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
+        const s = document.createElement('span'); s.className = 'w'; s.textContent = part; words.push(s); frag.appendChild(s);
+      });
+      n.replaceWith(frag);
+    });
+  });
+  const paint = () => {
+    const r = mtxt.getBoundingClientRect();
+    const k = Math.min(1, Math.max(0, (innerHeight * .85 - r.top) / (r.height + innerHeight * .25)));
+    const n = reduce ? words.length : Math.round(k * words.length);
+    words.forEach((w, i) => w.classList.toggle('on', i < n));
+  };
+  addEventListener('scroll', paint, { passive: true }); paint();
+
+  /* Подпункты возможностей: подсвечиваются по очереди, наведение — сразу. */
+  $$('[data-cycle]').forEach((box) => {
+    const subs = $$('.sub', box); let i = 0, held = false;
+    const on = (k) => { i = k; subs.forEach((s, j) => s.classList.toggle('is-on', j === k)); };
+    subs.forEach((s, k) => { s.addEventListener('mouseenter', () => { held = true; on(k); }); s.addEventListener('focus', () => on(k)); });
+    box.addEventListener('mouseleave', () => { held = false; });
+    if (!reduce) setInterval(() => { if (!held) on((i + 1) % subs.length); }, 4200);
+  });
+
+  /* Письмо печатается, требования вакансии подсвечены. */
+  const letter = $('#letterT');
+  const parts = [['Здравствуйте! В вакансии вы ищете разработчика с опытом в ', 0], ['React и TypeScript', 1], [' и работой над ', 0], ['дизайн-системой', 1], [' — последние три года я делаю ровно это в продуктовой команде. Готов показать код и обсудить задачи на созвоне.', 0]];
+  const full = parts.map((p) => p[0]).join('');
+  const render = (n) => {
+    letter.textContent = ''; let left = n;
+    parts.forEach(([t, hl]) => {
+      if (left <= 0) return;
+      const piece = t.slice(0, left); left -= t.length;
+      if (hl) { const m = document.createElement('mark'); m.textContent = piece; letter.appendChild(m); } else letter.appendChild(document.createTextNode(piece));
+    });
+  };
+  if (reduce) render(full.length);
+  else {
+    const caret = document.createElement('span'); caret.className = 'caret';
+    let n = 0;
+    const tick = () => { render(n); letter.appendChild(caret); if (n < full.length) { n++; setTimeout(tick, 24 + Math.random() * 30); } else setTimeout(() => { n = 0; tick(); }, 3500); };
+    tick();
+  }
+
+  /* Форма заполняется. */
+  const flds = $$('#demoForm .fld');
+  const fillForm = () => {
+    flds.forEach((f) => { f.classList.remove('is-on'); f.querySelector('.in').textContent = reduce ? f.querySelector('.in').dataset.a : ''; });
+    if (reduce) return;
+    flds.forEach((f, k) => setTimeout(() => { f.classList.add('is-on'); f.querySelector('.in').textContent = f.querySelector('.in').dataset.a; }, 700 + k * 900));
+    setTimeout(fillForm, 700 + flds.length * 900 + 2600);
+  };
+  fillForm();
+
+  /* Схема безопасности: пакеты по проводам. */
+  const flow = $('.flow');
+  const placeWires = () => {
+    const W = flow.clientWidth, H = flow.clientHeight;
+    const scale = (d) => d.replace(/([\d.]+)\s*,?\s*([\d.]+)/g, (_, x, y) => `${(+x / 100 * W).toFixed(1)} ${(+y / 78 * H).toFixed(1)}`);
+    const d1 = scale($('#w1').getAttribute('d')), d2 = scale($('#w2').getAttribute('d'));
+    $('#pk1').style.offsetPath = `path('${d1}')`; $('#pk2').style.offsetPath = `path('${d1}')`; $('#pk3').style.offsetPath = `path('${d2}')`;
+  };
+  if ('offsetPath' in document.documentElement.style) { placeWires(); addEventListener('resize', placeWires); }
+  else $$('.pk').forEach((p) => p.remove());
+})();
+</script>

@@ -1,0 +1,13 @@
+{
+  "name": "@hhpilot/automation-core",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Вся логика автоотклика на hh.ru — storage-agnostic, tenant-aware. Используется и cloud-worker (Mongoose), и local-agent (SQLite).",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node --test"
+  },
+  "dependencies": {
+    "playwright": "^1.48.0"
+  }
+}

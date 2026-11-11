@@ -1,0 +1,73 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1920px; height: 1080px; }
+  body {
+    font-family: 'Manrope', sans-serif; color: #fff; overflow: hidden; position: relative;
+    background:
+      radial-gradient(800px 600px at 400px 330px, rgba(18,237,207,.18), rgba(18,237,207,0) 70%),
+      radial-gradient(1200px 900px at 1600px 900px, rgba(62,84,160,.30), rgba(62,84,160,0) 70%),
+      linear-gradient(135deg, #060a15 0%, #0a1224 55%, #070b17 100%);
+  }
+  /* тонкая сетка — «данные», но не шумит */
+  .grid { position: absolute; inset: 0; opacity: .35;
+    background-image: linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(1000px 800px at 420px 540px, #000 30%, transparent 80%); }
+  .mark { position: absolute; left: 1180px; top: 120px; width: 640px; height: 640px; opacity: .14;
+    filter: drop-shadow(0 0 30px rgba(18,237,207,.6)); }
+  .board { position: absolute; left: 120px; top: 240px; width: 560px; }
+  .kicker { font-size: 22px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.55); margin-bottom: 26px; }
+  .row { display: grid; grid-template-columns: 180px 1fr 118px; align-items: center; gap: 16px; height: 58px; }
+  .name { font-size: 24px; font-weight: 600; white-space: nowrap; }
+  .bar { height: 10px; border-radius: 999px; background: rgba(255,255,255,.22); }
+  .price { font-size: 24px; font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
+  .others .row { color: #9aa3b8; }
+  /* чем дальше вниз, тем глуше — конкуренты «меркнут» */
+  .others .row:nth-child(1) { opacity: .62; } .others .row:nth-child(2) { opacity: .52; }
+  .others .row:nth-child(3) { opacity: .44; } .others .row:nth-child(4) { opacity: .37; }
+  .others .row:nth-child(5) { opacity: .31; } .others .row:nth-child(6) { opacity: .26; }
+  .others .row:nth-child(7) { opacity: .21; }
+  .others { filter: saturate(0); }
+  .hero-row {
+    position: relative; margin-bottom: 22px; padding: 22px 26px; border-radius: 22px;
+    background: linear-gradient(135deg, rgba(18,237,207,.16), rgba(18,237,207,.05));
+    border: 2px solid rgba(18,237,207,.75);
+    box-shadow: 0 0 0 1px rgba(18,237,207,.15), 0 0 60px rgba(18,237,207,.28), 0 30px 80px -30px rgba(0,0,0,.8);
+  }
+  .hero-row .row { height: auto; grid-template-columns: 154px 1fr 150px; }
+  .hero-row .name { font-size: 32px; font-weight: 800; letter-spacing: .01em; }
+  .hero-row .name b { color: #12edcf; font-weight: 800; }
+  .hero-row .bar { height: 16px; background: linear-gradient(90deg, #12edcf, #7ff7e6); box-shadow: 0 0 22px rgba(18,237,207,.8); }
+  .hero-row .price { font-size: 38px; font-weight: 800; color: #12edcf; }
+  .hero-row .price small { display: block; font-size: 18px; font-weight: 600; color: rgba(255,255,255,.6); margin-top: 2px; }
+  .chip { display: inline-flex; align-items: center; gap: 10px; margin-top: 14px; padding: 7px 14px; border-radius: 999px;
+    background: rgba(18,237,207,.14); border: 1px solid rgba(18,237,207,.45); font-size: 17px; font-weight: 700; color: #bffaf1; }
+  .chip i { width: 10px; height: 10px; border-radius: 50%; background: #12edcf; box-shadow: 0 0 12px #12edcf; }
+  .note { position: absolute; left: 120px; bottom: 96px; font-size: 16px; color: rgba(255,255,255,.34); }
+</style></head><body>
+<div class="grid"></div>
+<svg class="mark" viewBox="-8 83 192 192" aria-hidden="true"><path fill="none" stroke="#12edcf" stroke-width="1.6" d="M 135.738 103.947 A 87.891 87.891 0 1 0 171.98 147.006 L 147.486 170.711 A 57.939 57.939 0 1 1 113.074 125.88 Z M 105.87 188.371 L 171.535 124.824 A 11.967 11.967 0 0 0 154.892 107.626 L 89.227 171.172 A 11.967 11.967 0 0 0 105.87 188.371 Z"/></svg>
+<div class="board">
+  <div class="kicker">Цена месяца · автоотклики hh.ru</div>
+  <div class="hero-row">
+    <div class="row">
+      <div class="name">Откликс</div>
+      <div class="bar" style="width: 48px"></div>
+      <div class="price">199 ₽<small>в месяц</small></div>
+    </div>
+    <div class="chip"><i></i>Бесплатно — 100 откликов в день</div>
+  </div>
+  <div class="others">
+    <div class="row"><div class="name">ReplyPilot</div><div class="bar" style="width: 53px"></div><div class="price">от 249 ₽</div></div>
+    <div class="row"><div class="name">XAGO</div><div class="bar" style="width: 58px"></div><div class="price">299 ₽</div></div>
+    <div class="row"><div class="name">JobTurbo</div><div class="bar" style="width: 68px"></div><div class="price">399 ₽</div></div>
+    <div class="row"><div class="name">JobSniper</div><div class="bar" style="width: 72px"></div><div class="price">449 ₽</div></div>
+    <div class="row"><div class="name">AFK Offer</div><div class="bar" style="width: 89px"></div><div class="price">699 ₽</div></div>
+    <div class="row"><div class="name">НейроКарьера</div><div class="bar" style="width: 151px"></div><div class="price">1 990 ₽</div></div>
+    <div class="row"><div class="name">Vakai</div><div class="bar" style="width: 200px"></div><div class="price">3 499 ₽</div></div>
+  </div>
+</div>
+<div class="note">Цены месяца с сайтов сервисов на 29.09.2026</div>
+</body></html>

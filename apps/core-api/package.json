@@ -1,0 +1,21 @@
+{
+  "name": "@hhpilot/core-api",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Откликс core-api — auth, тарифы, дашборд-API, пейринг устройств, LLM-прокси для local-agent",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.22.3",
+    "helmet": "^8.3.0",
+    "jose": "^5.9.6",
+    "mongoose": "^8.5.0",
+    "nodemailer": "^10.0.10"
+  }
+}

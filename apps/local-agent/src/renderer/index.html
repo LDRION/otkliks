@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;" />
+  <title>Откликс</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Значки одним набором: <use href="#i-…"> вместо копий svg в каждой кнопке. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo" viewBox="-8 83 192 192"><path fill="currentColor" fill-rule="evenodd" d="M 135.738 103.947 A 87.891 87.891 0 1 0 171.98 147.006 L 147.486 170.711 A 57.939 57.939 0 1 1 113.074 125.88 Z M 105.87 188.371 L 171.535 124.824 A 11.967 11.967 0 0 0 154.892 107.626 L 89.227 171.172 A 11.967 11.967 0 0 0 105.87 188.371 Z"/></symbol>
+    <symbol id="i-pilot" viewBox="0 0 16 16"><path d="M2 8.6h2.1l1.3-3.7 2 6.4 1.3-3.7H14"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 16 16"><path d="M4.3 2.5h4.9L12 5.3v8.2H4.3z"/><path d="M9 2.5v3h3M6.2 8.4h3.6M6.2 10.6h3.6"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><g stroke-width="2.1"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></g></symbol>
+    <symbol id="i-spark" viewBox="0 0 16 16"><path d="M7.4 2.6c.5 3.1 1.7 4.3 4.8 4.8-3.1.5-4.3 1.7-4.8 4.8-.5-3.1-1.7-4.3-4.8-4.8 3.1-.5 4.3-1.7 4.8-4.8z"/><path d="M12.6 1.4c.2 1.1.6 1.5 1.7 1.7-1.1.2-1.5.6-1.7 1.7-.2-1.1-.6-1.5-1.7-1.7 1.1-.2 1.5-.6 1.7-1.7z"/></symbol>
+    <symbol id="i-overview" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.6"/><path d="m10.2 5.8-1.4 3-3 1.4 1.4-3z"/></symbol>
+    <symbol id="i-feed" viewBox="0 0 16 16"><path d="M3 4h10M3 8h10M3 12h6"/></symbol>
+    <symbol id="i-invite" viewBox="0 0 16 16"><path d="M3.6 2.7c-.5 0-.9.4-.9.9 0 5.5 4.2 9.7 9.7 9.7.5 0 .9-.4.9-.9v-2c0-.4-.3-.8-.7-.9l-2.3-.5c-.4-.1-.8.1-1 .4l-.5.9a6.6 6.6 0 0 1-3.4-3.4l.9-.5c.3-.2.5-.6.4-1l-.5-2.3c-.1-.4-.5-.7-.9-.7z"/></symbol>
+    <symbol id="i-ask" viewBox="0 0 16 16"><path d="M2.5 3.2c0-.4.3-.7.7-.7h9.6c.4 0 .7.3.7.7v6.4c0 .4-.3.7-.7.7H6.2l-2.9 2.4c-.3.2-.8 0-.8-.4z"/><path d="M8 5.1c.7 0 1.2.5 1.2 1.1 0 .5-.3.7-.7 1-.3.2-.5.4-.5.8"/></symbol>
+    <symbol id="i-code" viewBox="0 0 16 16"><path d="M6.2 5 3.4 8l2.8 3M9.8 5l2.8 3-2.8 3"/></symbol>
+    <symbol id="i-resume" viewBox="0 0 16 16"><rect x="3" y="2.5" width="10" height="11" rx="1.6"/><circle cx="8" cy="6.3" r="1.6"/><path d="M5.4 11c.5-1.3 1.4-2 2.6-2s2.1.7 2.6 2"/></symbol>
+    <symbol id="i-ruble" viewBox="0 0 16 16"><path d="M5.5 13.5V2.8h3.6a2.6 2.6 0 0 1 0 5.2H4M4 10.6h5.6"/></symbol>
+    <symbol id="i-user" viewBox="0 0 16 16"><circle cx="8" cy="5.6" r="2.6"/><path d="M3.4 13.4c.7-2.4 2.4-3.6 4.6-3.6s3.9 1.2 4.6 3.6"/></symbol>
+    <symbol id="i-link" viewBox="0 0 16 16"><path d="M6.8 9.2a2.6 2.6 0 0 0 3.7 0l2-2a2.6 2.6 0 0 0-3.7-3.7l-.6.6"/><path d="M9.2 6.8a2.6 2.6 0 0 0-3.7 0l-2 2a2.6 2.6 0 0 0 3.7 3.7l.6-.6"/></symbol>
+    <symbol id="i-key" viewBox="0 0 16 16"><circle cx="5.5" cy="10.5" r="2.6"/><path d="m7.4 8.6 5.1-5.1M10.6 5.4l1.5 1.5M11.9 4.1l1.2 1.2"/></symbol>
+    <symbol id="i-form" viewBox="0 0 16 16"><rect x="3.2" y="2.5" width="9.6" height="11" rx="1.6"/><path d="M5.6 6.2h4.8M5.6 8.6h4.8M5.6 11h2.6"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 16 16"><path d="M4.2 11V7.4a3.8 3.8 0 0 1 7.6 0V11l1.2 1.4H3z"/><path d="M6.6 13.6a1.5 1.5 0 0 0 2.8 0"/></symbol>
+    <symbol id="i-card" viewBox="0 0 16 16"><rect x="2" y="3.6" width="12" height="8.8" rx="1.6"/><path d="M2 6.6h12M4.4 10h2.4"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 16 16"><rect x="3.2" y="7" width="9.6" height="6.6" rx="1.4"/><path d="M5.4 7V5.2a2.6 2.6 0 0 1 5.2 0V7"/></symbol>
+    <symbol id="i-out" viewBox="0 0 16 16"><path d="M6.5 2.5H4A1.5 1.5 0 0 0 2.5 4v8A1.5 1.5 0 0 0 4 13.5h2.5M10 5.2 12.8 8 10 10.8M12.6 8H6.3"/></symbol>
+    <symbol id="i-ext" viewBox="0 0 16 16"><path d="M9.5 2.5h4v4M13.3 2.7 7.8 8.2M12 9.5v3a1 1 0 0 1-1 1H3.5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 16 16"><path d="m6 4 4 4-4 4"/></symbol>
+    <symbol id="i-check" viewBox="0 0 16 16"><path d="m3.6 8.4 2.8 2.8 6-6.4"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 16 16"><path d="M8 3.5v9M3.5 8h9"/></symbol>
+    <symbol id="i-x" viewBox="0 0 16 16"><path d="m4.5 4.5 7 7M11.5 4.5l-7 7"/></symbol>
+    <symbol id="i-more" viewBox="0 0 16 16"><g fill="currentColor" stroke="none"><circle cx="3.4" cy="8" r="1.25"/><circle cx="8" cy="8" r="1.25"/><circle cx="12.6" cy="8" r="1.25"/></g></symbol>
+    <symbol id="i-chatoff" viewBox="0 0 16 16"><path d="M5.2 2.5h7.6c.4 0 .7.3.7.7v6.4c0 .4-.3.7-.7.7h-1.6M8.6 10.3H6.2l-2.9 2.4c-.3.2-.8 0-.8-.4V4.6"/><path d="m2 2 12 12"/></symbol>
+    <symbol id="i-ban" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5.6"/><path d="m4.1 4.1 7.8 7.8"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 16 16"><path d="M2.8 4.4h10.4M6.2 4.4V3.1c0-.3.3-.6.6-.6h2.4c.3 0 .6.3.6.6v1.3M4.3 4.4l.6 8.3c.1.6.5 1 1.1 1h4c.6 0 1-.4 1.1-1l.6-8.3M6.7 7v4.2M9.3 7v4.2"/></symbol>
+    <symbol id="i-task" viewBox="0 0 16 16"><rect x="2.6" y="2.6" width="10.8" height="10.8" rx="2.4"/><path d="m5.4 8.2 1.8 1.8 3.4-3.6"/></symbol>
+  </svg>
+
+  <div id="root">
+    <!-- Своя рамка окна (frame:false): «Свернуть» и «Свернуть в трей». -->
+    <div class="win-controls" id="win-controls">
+      <button class="win-btn" id="win-min" type="button" aria-label="Свернуть" title="Свернуть"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6h8"/></svg></button>
+      <button class="win-btn win-btn--close" id="win-close" type="button" aria-label="Свернуть в трей" title="Свернуть в трей"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 3l6 6M9 3l-6 6"/></svg></button>
+    </div>
+
+    <!-- ═══ Вход и регистрация ═══ -->
+    <div id="auth-screen" class="auth">
+      <div class="auth__drag" aria-hidden="true"></div>
+      <div class="auth__card">
+        <div class="brand brand--lg"><svg class="brand__mark"><use href="#logo"/></svg><span>ткл<b>икс</b></span></div>
+        <h1 class="auth__title" id="auth-title">Вход в Откликс</h1>
+        <p class="auth__sub" id="auth-sub">Автопилот поиска работы на hh.ru</p>
+
+        <form id="login-form" class="form">
+          <label class="fld"><span>Email</span><input type="email" id="login-email" required autocomplete="username" placeholder="you@example.com" /></label>
+          <label class="fld"><span>Пароль</span><input type="password" id="login-password" required autocomplete="current-password" /></label>
+          <div id="login-error" class="error-text hidden"></div>
+          <button type="submit" class="btn btn--dark btn--block" id="login-submit">Войти</button>
+        </form>
+
+        <form id="register-form" class="form hidden">
+          <label class="fld"><span>Имя</span><input type="text" id="register-name" placeholder="Иван Петров" /></label>
+          <label class="fld"><span>Email</span><input type="email" id="register-email" required autocomplete="username" placeholder="you@example.com" /></label>
+          <label class="fld"><span>Пароль</span><input type="password" id="register-password" required minlength="8" autocomplete="new-password" placeholder="Минимум 8 символов" /></label>
+          <label class="check"><input type="checkbox" id="register-consent" required /><span>Даю <a href="#" data-external="https://otkliks.ru/consent">согласие на обработку персональных данных</a></span></label>
+          <div id="register-error" class="error-text hidden"></div>
+          <button type="submit" class="btn btn--dark btn--block" id="register-submit">Создать аккаунт</button>
+          <p class="fineprint">Создавая аккаунт, вы принимаете условия <a href="#" data-external="https://otkliks.ru/oferta">оферты</a> и <a href="#" data-external="https://otkliks.ru/privacy">политику конфиденциальности</a>.</p>
+        </form>
+
+        <div class="auth__switch">
+          <span id="switch-to-register-wrap">Нет аккаунта? <button class="link-btn" id="switch-to-register" type="button">Создать</button></span>
+          <span id="switch-to-login-wrap" class="hidden">Уже есть аккаунт? <button class="link-btn" id="switch-to-login" type="button">Войти</button></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ Окна ═══ -->
+    <div id="consent-modal" class="modal-backdrop hidden">
+      <div class="modal" role="dialog" aria-labelledby="consent-title">
+        <span class="modal__ico"><svg><use href="#i-form"/></svg></span>
+        <h2 id="consent-title">Заполнять анкеты работодателей за вас?</h2>
+        <p>Работодатели часто присылают ссылку на анкету. Автопилот может открыть её и заполнить по фактам из резюме — имя, опыт, зарплатные ожидания, — а потом написать в чате, что анкета отправлена.</p>
+        <p>Он <b>никогда</b> не проходит тесты знаний и тестовые задания, не обходит капчу, не заполняет формы входа и не прикладывает файлы — такие ссылки придут вам.</p>
+        <p class="muted">Решение можно поменять в любой момент в «Настройках».</p>
+        <div class="modal__actions">
+          <button class="btn btn--line" id="consent-no" type="button">Продолжить без этого</button>
+          <button class="btn btn--dark" id="consent-yes" type="button">Да, заполнять анкеты</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Обновление — плашка в углу, НЕ окно поверх интерфейса: раньше на время загрузки
+         (130 МБ, а при автозапуске сеть ещё нестабильна) оно закрывало весь лаунчер. -->
+    <div id="update-modal" class="upd hidden" role="status" aria-live="polite">
+      <div class="upd__head">
+        <span class="upd__ico"><svg><use href="#i-plus"/></svg></span>
+        <div class="upd__txt"><b id="update-title">Готовим обновление…</b><span id="update-sub">Скачиваем в фоне — работать это не мешает.</span></div>
+        <button class="upd__x" id="update-hide-btn" type="button" aria-label="Скрыть" title="Скрыть"><svg><use href="#i-x"/></svg></button>
+      </div>
+      <div class="progress"><div class="progress__bar" id="update-bar"></div></div>
+      <div class="upd__actions" id="update-actions" style="display:none;">
+        <button class="btn btn--line btn--sm" id="update-later-btn" type="button">Позже</button>
+        <button class="btn btn--dark btn--sm" id="update-apply-btn" type="button">Перезапустить</button>
+      </div>
+    </div>
+
+    <!-- ═══ Приложение ═══ -->
+    <div id="app-shell" class="shell hidden">
+      <!-- Колонка разделов -->
+      <nav class="rail" aria-label="Разделы">
+        <span class="rail__logo" title="Откликс"><svg><use href="#logo"/></svg></span>
+        <button class="rail__btn active" type="button" data-view="dashboard" title="Автопилот" aria-label="Автопилот"><svg><use href="#i-pilot"/></svg></button>
+        <button class="rail__btn" type="button" data-view="profile" title="Резюме и профиль" aria-label="Резюме и профиль"><svg><use href="#i-doc"/></svg></button>
+        <button class="rail__btn" type="button" data-view="settings" title="Настройки" aria-label="Настройки"><svg><use href="#i-gear"/></svg></button>
+        <span class="rail__spacer"></span>
+        <button class="rail__btn rail__btn--quiet" type="button" id="logout-btn" title="Выйти из аккаунта" aria-label="Выйти из аккаунта"><svg><use href="#i-out"/></svg></button>
+        <span class="rail__ava" id="user-ava" aria-hidden="true">О</span>
+      </nav>
+
+      <!-- Боковая панель: пункты текущего раздела -->
+      <aside class="side">
+        <div class="side__nav" data-for="dashboard">
+          <div class="side__title">Автопилот</div>
+          <button class="nav-i active" type="button" data-panel="overview"><svg><use href="#i-overview"/></svg>Обзор</button>
+          <button class="nav-i" type="button" data-panel="feed"><svg><use href="#i-feed"/></svg>Что происходит</button>
+          <div class="side__group">Нужно вам</div>
+          <button class="nav-i" type="button" data-panel="invites"><svg><use href="#i-invite"/></svg>Приглашения<span class="cnt cnt--good hidden" id="badge-invites">0</span></button>
+          <button class="nav-i" type="button" data-panel="clarifications"><svg><use href="#i-ask"/></svg>Нужен ваш ответ<span class="cnt cnt--warn hidden" id="badge-clar">0</span></button>
+          <button class="nav-i" type="button" data-panel="exclusions"><svg><use href="#i-chatoff"/></svg>Исключения<span class="cnt hidden" id="badge-excl">0</span></button>
+          <button class="nav-i" type="button" data-panel="blacklist"><svg><use href="#i-ban"/></svg>Чёрный список<span class="cnt hidden" id="badge-bl">0</span></button>
+          <div class="side__group">Для разбора</div>
+          <button class="nav-i" type="button" data-panel="log"><svg><use href="#i-code"/></svg>Журнал работы</button>
+        </div>
+        <div class="side__nav hidden" data-for="profile">
+          <div class="side__title">Резюме и профиль</div>
+          <button class="nav-i active" type="button" data-jump="sec-resumes"><svg><use href="#i-resume"/></svg>Резюме</button>
+          <button class="nav-i" type="button" data-jump="sec-salary"><svg><use href="#i-ruble"/></svg>Минимальная зарплата</button>
+          <button class="nav-i" type="button" data-jump="sec-about"><svg><use href="#i-user"/></svg>О себе</button>
+          <button class="nav-i" type="button" data-jump="sec-links"><svg><use href="#i-link"/></svg>Ссылки и контакты</button>
+        </div>
+        <div class="side__nav hidden" data-for="settings">
+          <div class="side__title">Настройки</div>
+          <button class="nav-i active" type="button" data-jump="sec-hh"><svg><use href="#i-key"/></svg>Вход в hh.ru</button>
+          <button class="nav-i" type="button" data-jump="sec-forms"><svg><use href="#i-form"/></svg>Анкеты</button>
+          <button class="nav-i" type="button" data-jump="sec-notify"><svg><use href="#i-bell"/></svg>Уведомления</button>
+          <button class="nav-i" type="button" data-jump="sec-account"><svg><use href="#i-card"/></svg>Аккаунт и тариф</button>
+          <button class="nav-i" type="button" data-jump="sec-security"><svg><use href="#i-lock"/></svg>Пароль</button>
+        </div>
+
+        <!-- Состояние автопилота — всегда на виду, из любого раздела. -->
+        <div class="pilot">
+          <div class="pilot__row">
+            <span class="status-dot" id="status-dot"></span>
+            <b id="status-text">Автопилот выключен</b>
+          </div>
+          <button class="btn btn--dark btn--block btn--sm" id="toggle-automation-btn" type="button">Запустить</button>
+          <div class="autostart" id="autostart-wrap">
+            <button class="switch-btn" id="autostart-toggle" type="button" role="switch" aria-checked="false" aria-describedby="autostart-tip">
+              <span class="switch" aria-hidden="true"></span><span>Автозапуск</span>
+            </button>
+            <div class="tip" id="autostart-tip" role="tooltip">
+              <b>Запускаться вместе с компьютером</b>
+              <p>Включили компьютер — Откликс стартует сам, в фоне, и сразу берётся за работу.</p>
+              <p class="tip__state" id="autostart-tip-state">Сейчас выключено — нажмите, чтобы включить.</p>
+            </div>
+          </div>
+        </div>
+        <div class="side__user">
+          <span class="plan" id="sub-badge">—</span>
+          <span class="side__email" id="user-email"></span>
+        </div>
+      </aside>
+
+      <!-- Рабочая область -->
+      <main class="main">
+        <header class="main__head">
+          <h1 id="main-title">Обзор</h1>
+          <div class="main__actions" id="main-actions"></div>
+        </header>
+        <div class="main__body" id="main-scroll">
+
+          <!-- ── Автопилот ── -->
+          <section class="view" id="view-dashboard">
+            <div class="panel" id="overview">
+              <div id="task-card" class="task hidden">
+                <span class="task__ico"><svg><use href="#i-task"/></svg></span>
+                <div class="task__body">
+                  <div class="task__step" id="task-step">Задание 1 из 4</div>
+                  <b id="task-title"></b>
+                  <div class="task__text" id="task-text"></div>
+                  <div class="task__msg" id="task-msg"></div>
+                </div>
+                <div class="task__actions">
+                  <button class="btn btn--line btn--sm" id="task-done-btn" type="button" disabled>Готово</button>
+                  <button class="btn btn--dark btn--sm" id="task-open-btn" type="button">Открыть</button>
+                </div>
+              </div>
+
+              <div class="ov-grid">
+                <div class="card ov-chart">
+                  <div class="ov-chart__head">
+                    <div>
+                      <div class="label">Отклики за 14 дней</div>
+                      <div class="big" id="chart-total">0</div>
+                    </div>
+                    <div class="ov-chart__meta"><span>Всего</span><b id="stat-applied">0</b></div>
+                  </div>
+                  <div class="chart" id="chart"></div>
+                </div>
+                <div class="ov-side">
+                  <div class="card">
+                    <div class="card__head"><b>Задачи</b></div>
+                    <div class="tasks" id="tasks"></div>
+                  </div>
+                  <div class="card">
+                    <div class="card__head"><b>Резюме</b><button class="btn btn--line btn--xs" type="button" data-goto="profile">Изменить</button></div>
+                    <div class="reslist" id="ov-resumes"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tiles">
+                <div class="tile stat-card"><span>Отклики сегодня</span><b id="stat-today">0</b></div>
+                <div class="tile stat-card"><span>Сообщения в чатах</span><b id="stat-msgs-today">0</b></div>
+                <div class="tile stat-card stat-card--good"><span>Приглашения</span><b id="stat-interviews">0</b></div>
+                <div class="tile stat-card stat-card--bad"><span>Отказы</span><b id="stat-rejections">0</b></div>
+              </div>
+
+              <div id="trial-banner" class="banner hidden">
+                <div><b>Бесплатный тариф — всё включено</b><span id="trial-text">До 100 откликов в день с письмом под каждую вакансию, переписка и анкеты. Платный — приоритет, до 200 в день и без заданий: 99 ₽/неделя или 199 ₽/месяц.</span></div>
+                <button class="btn btn--line btn--sm" id="open-billing-btn" type="button">Личный кабинет<svg><use href="#i-ext"/></svg></button>
+              </div>
+            </div>
+
+            <div class="panel hidden" id="feed-panel">
+              <div class="table">
+                <div class="table__head ev"><span>Время</span><span>Событие</span><span>Вакансия</span><span></span></div>
+                <div class="table__body" id="feed">
+                  <div class="empty" id="feed-empty"><b>Пока тихо</b>Здесь появятся отправленные отклики, ответы работодателей и всё, что потребует вашего внимания.</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel hidden" id="invites">
+              <div class="table">
+                <div class="table__head inv"><span>Вакансия</span><span>Когда</span><span></span><span></span></div>
+                <div class="table__body" id="invites-list"></div>
+                <div class="empty" id="invites-empty"><b>Пока нет приглашений</b>Как только работодатель позовёт на созвон, приглашение появится здесь. Время выбираете вы.</div>
+              </div>
+            </div>
+
+            <div class="panel hidden" id="clarifications">
+              <div class="clarifications" id="clarifications-list"></div>
+              <div class="empty empty--card" id="clar-empty"><b>Всё отвечено</b>Здесь появятся вопросы работодателей, на которые нужен именно ваш ответ: время созвона, переезд, оффер.</div>
+            </div>
+
+            <div class="panel hidden" id="exclusions">
+              <p class="excl__lead">Переписки, которые вы ведёте сами. Этому работодателю автопилот не напишет ничего: ни в чат, ни откликом на его вакансии, ни анкетой. Поиск других вакансий идёт как обычно.</p>
+              <form class="excl__add" id="excl-form" autocomplete="off">
+                <input type="text" id="excl-link" placeholder="Ссылка на вакансию или переписку hh.ru" aria-label="Ссылка на вакансию или переписку hh.ru">
+                <button class="btn btn--dark" type="submit">Добавить</button>
+              </form>
+              <div class="excl__msg hidden" id="excl-msg" role="status"></div>
+              <div class="table">
+                <div class="table__head excl"><span>Работодатель</span><span>Добавлено</span><span></span></div>
+                <div class="table__body" id="excl-list"></div>
+                <div class="empty" id="excl-empty"><b>Исключений нет</b>Добавьте ссылку выше или выберите «В исключения» в меню <span class="excl__ico"><svg><use href="#i-more"/></svg></span> у приглашения или вопроса работодателя.</div>
+              </div>
+            </div>
+
+            <div class="panel hidden" id="blacklist">
+              <p class="excl__lead">Компании, от которых вы ничего не хотите. Автопилот не откликается на их вакансии и не пишет им в чатах — даже если там уже идёт переписка.</p>
+              <form class="excl__add" id="bl-form" autocomplete="off">
+                <input type="text" id="bl-text" placeholder="Название компании или ссылка на работодателя или вакансию hh.ru" aria-label="Название компании или ссылка">
+                <button class="btn btn--dark" type="submit">Добавить</button>
+              </form>
+              <label class="check bl__broad"><input type="checkbox" id="bl-broad" /><span>И все компании, связанные по названию <span class="bl__word" id="bl-word"></span></span></label>
+              <div class="excl__msg hidden" id="bl-msg" role="status"></div>
+              <div class="table">
+                <div class="table__head excl"><span>Компания</span><span>Добавлено</span><span></span></div>
+                <div class="table__body" id="bl-list"></div>
+                <div class="empty" id="bl-empty"><b>Чёрный список пуст</b>Добавьте компанию выше или выберите «В чёрный список» в меню <span class="excl__ico"><svg><use href="#i-more"/></svg></span> у приглашения или вопроса работодателя.</div>
+              </div>
+            </div>
+
+            <div class="panel hidden" id="log-panel">
+              <div class="log" id="log-feed">
+                <div class="empty" id="log-empty"><b>Журнал пуст</b>Здесь появляются подробные строки о работе автопилота — пригодятся, если что-то пойдёт не так.</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ── Резюме и профиль ── -->
+          <section class="view hidden" id="view-profile">
+            <div class="card sec" id="sec-resumes">
+              <div class="sec__head"><b>Резюме</b><p>Ссылка на резюме с hh.ru и название для себя.<br>Можно несколько — автопилот ведёт их параллельно.</p></div>
+              <div class="sec__body">
+                <div id="resume-list"></div>
+                <button class="btn btn--line btn--sm" id="add-resume-btn" type="button"><svg><use href="#i-plus"/></svg>Добавить резюме</button>
+                <p class="error-text hidden" id="profile-error">Добавьте хотя бы одно резюме со ссылкой на hh.ru — по ней автопилот подбирает вакансии.</p>
+              </div>
+            </div>
+
+            <div class="card sec" id="sec-salary">
+              <div class="sec__head"><b>Минимальная зарплата</b><p>Вакансии ниже пропускаем. Где вилка не указана — откликаемся и упоминаем ваш ориентир.<br>Пусто — возьмём из резюме.</p></div>
+              <div class="sec__body">
+                <div class="inline">
+                  <input id="min-salary-amount" type="number" min="0" step="1000" inputmode="numeric" placeholder="250 000" />
+                  <select id="min-salary-currency"><option value="RUB">₽ в месяц</option><option value="USD">$ в месяц</option><option value="EUR">€ в месяц</option></select>
+                </div>
+              </div>
+            </div>
+
+            <div class="card sec" id="sec-about">
+              <div class="sec__head"><b>О себе</b><p>Этим подписываются письма и на это опирается ИИ в ответах работодателям.</p></div>
+              <div class="sec__body">
+                <label class="fld"><span>Ваше имя</span><input id="full-name" placeholder="Иван Петров" autocomplete="name" /></label>
+                <label class="fld"><span>Сильные стороны <i>через запятую, отвечаем уверенно</i></span><textarea id="strong-stack" rows="2" placeholder="JavaScript, TypeScript, React, Node.js"></textarea></label>
+                <label class="fld"><span>Честные пробелы <i>через запятую</i></span><textarea id="honest-gaps" rows="2" placeholder="PHP, C++"></textarea></label>
+              </div>
+            </div>
+
+            <div class="card sec" id="sec-links">
+              <div class="sec__head"><b>Ссылки и контакты</b><p>Необязательно.<br>Telegram назовём, только если работодатель сам попросит контакт.</p></div>
+              <div class="sec__body">
+                <label class="fld"><span>Портфолио</span><input id="portfolio-canonical" placeholder="github.com/handle" /></label>
+                <label class="fld"><span>Telegram для связи</span><input id="contact-telegram" placeholder="@username" autocomplete="off" /></label>
+              </div>
+            </div>
+
+            <div class="savebar">
+              <span class="saved hidden" id="profile-saved"><svg><use href="#i-check"/></svg>Сохранено</span>
+              <span class="error-text hidden" id="profile-save-error"></span>
+              <button class="btn btn--dark" id="save-profile-btn" type="button">Сохранить</button>
+            </div>
+          </section>
+
+          <!-- ── Настройки ── -->
+          <section class="view hidden" id="view-settings">
+            <div class="card sec" id="sec-hh">
+              <div class="sec__head"><b>Вход в hh.ru</b><p>Один раз войдите в окне браузера — дальше автопилот работает в фоне на той же сессии.<br>Пароль мы не видим.</p></div>
+              <div class="sec__body">
+                <div class="state" id="hh-state"><span class="status-dot" id="hh-dot"></span><b id="hh-state-text">Проверяем вход…</b></div>
+                <div class="inline">
+                  <button class="btn btn--dark btn--sm" id="hh-login-btn" type="button">Войти в hh.ru</button>
+                  <button class="btn btn--line btn--sm" id="hh-check-btn" type="button">Проверить</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card sec" id="sec-forms">
+              <div class="sec__head"><b>Анкеты</b><p>Ссылки на Google Формы, Яндекс Формы и анкеты на сайтах работодателей.<br>Тесты, капча, формы входа и файлы всегда остаются вам.</p></div>
+              <div class="sec__body">
+                <label class="toggle"><span>Заполнять анкеты автоматически</span><input type="checkbox" id="consent-toggle" /></label>
+                <div class="acc">
+                  <div class="acc__row"><span class="status-dot" id="google-dot"></span><span id="google-state">Google — проверяем…</span><button class="btn btn--line btn--xs" id="google-login-btn" type="button">Войти</button><button class="btn btn--ghost btn--xs" id="google-check-btn" type="button">Проверить</button></div>
+                  <div class="acc__row"><span class="status-dot" id="yandex-dot"></span><span id="yandex-state">Яндекс — проверяем…</span><button class="btn btn--line btn--xs" id="yandex-login-btn" type="button">Войти</button><button class="btn btn--ghost btn--xs" id="yandex-check-btn" type="button">Проверить</button></div>
+                </div>
+                <p class="hint">Вход в Google и Яндекс нужен только для анкет «для вошедших». Пароли вводите сами в обычном окне браузера — лаунчер их не видит.</p>
+              </div>
+            </div>
+
+            <div class="card sec" id="sec-notify">
+              <div class="sec__head"><b>Уведомления</b><p>Приглашения и вопросы к вам видны всегда.<br>Решите, что ещё показывать.</p></div>
+              <div class="sec__body">
+                <label class="toggle"><span>Предупреждения: не смог ответить, слетела сессия</span><input type="checkbox" id="notify-alerts-toggle" checked /></label>
+                <label class="toggle"><span>Заполненные анкеты</span><input type="checkbox" id="notify-forms-toggle" checked /></label>
+              </div>
+            </div>
+
+            <div class="card sec" id="sec-account">
+              <div class="sec__head"><b>Аккаунт и тариф</b><p>Оплата и история — в личном кабинете на otkliks.ru.</p></div>
+              <div class="sec__body">
+                <dl class="kv">
+                  <dt>Email</dt><dd id="settings-email"></dd>
+                  <dt>Тариф</dt><dd id="settings-sub-status"></dd>
+                  <dt>Версия</dt><dd id="settings-version"></dd>
+                </dl>
+                <button class="btn btn--line btn--sm" id="settings-billing-btn" type="button">Управлять тарифом<svg><use href="#i-ext"/></svg></button>
+              </div>
+            </div>
+
+            <div class="card sec" id="sec-security">
+              <div class="sec__head"><b>Пароль от Откликса</b><p>Не от hh.ru — тот вводится только на самом hh.ru.</p></div>
+              <div class="sec__body">
+                <div class="inline inline--stack" id="password-form">
+                  <input type="password" id="password-current" placeholder="Текущий пароль" autocomplete="current-password" />
+                  <input type="password" id="password-new" placeholder="Новый пароль, минимум 8 символов" autocomplete="new-password" />
+                  <button class="btn btn--line btn--sm" id="password-submit-btn" type="button">Сменить пароль</button>
+                </div>
+                <p class="hint" id="password-status"></p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

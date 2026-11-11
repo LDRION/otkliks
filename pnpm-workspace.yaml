@@ -1,0 +1,9 @@
+packages:
+  - "packages/*"
+  - "apps/*"
+allowBuilds:
+  electron: true
+  # Тянется за electron-builder, но не используется: установщик собирается
+  # через NSIS (apps/local-agent/electron-builder.yml). Скрипт сборки не нужен.
+  electron-winstaller: false
+  sharp: true
