@@ -20,7 +20,7 @@
   payment.js`). Как только у `core-api` появится публичный адрес — прописать его в
   `OTKLIKS_CORE_API_URL` на проде Siberi, иначе вебхукам об оплате Откликс некуда прийти.
 - `SMTP_HOST`/`SMTP_USER`/`SMTP_PASS`/`SMTP_FROM` — свой ящик на домене сайта. **Не**
-  переиспользовать SMTP Siberi (`noreply@siberi.online`) — чужой домен отправителя на
+  переиспользовать SMTP Siberi (`noreply@<домен Siberi>`) — чужой домен отправителя на
   письмах другого продукта.
 - `MONGODB_URI` и `CORE_API_URL` в этих файлах — dev-значения (`127.0.0.1`/`localhost`);
   `docker-compose.yml` сам подставляет правильные адреса контейнеров (`mongo`, `core-api`),
@@ -40,8 +40,8 @@ docker compose up -d --build
 
 Ни один из контейнеров не отдаёт HTTPS сам — нужен nginx/Caddy перед ними:
 
-- `otkliks.ru` → `marketing-site:3000`
-- `api.otkliks.ru` (или путь `/api` на том же домене) → `core-api:4000`, публично
+- `example.ru` → `marketing-site:3000`
+- `api.example.ru` (или путь `/api` на том же домене) → `core-api:4000`, публично
   доступен — сюда стучится и браузер клиента, и форвард вебхука с сервера Siberi.
 
 ## 4. Данные
